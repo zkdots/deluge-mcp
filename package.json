@@ -1,6 +1,6 @@
 {
   "name": "deluge-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1-beta.0",
   "description": "Strict, beginner-focused Deluge syntax MCP server",
   "type": "module",
   "private": true,
