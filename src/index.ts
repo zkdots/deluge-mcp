@@ -1,5 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { z } from "zod";
 import { KnowledgeStore } from "./knowledge/store.js";
 import { getBeginnerCheatsheet } from "./resources/cheatsheet.js";
@@ -9,8 +11,10 @@ import { fixDeluge } from "./tools/fixer.js";
 import { validateDeluge } from "./tools/validator.js";
 
 export async function createServer(): Promise<McpServer> {
+  const serverStartMs = Date.now();
   const store = new KnowledgeStore();
   await store.load();
+  const snippetCount = store.all().length;
 
   const server = new McpServer({
     name: "deluge-mcp",
@@ -129,6 +133,56 @@ export async function createServer(): Promise<McpServer> {
     }
   );
 
+  server.registerTool(
+    "deluge_health",
+    {
+      title: "Deluge MCP Health",
+      description: "Report runtime health, uptime, and knowledge base availability.",
+      inputSchema: {
+        verbose: z.boolean().optional()
+      }
+    },
+    async ({ verbose }) => {
+      const uptimeMs = Date.now() - serverStartMs;
+      const warnings: string[] = [];
+
+      if (snippetCount === 0) {
+        warnings.push("Knowledge base has zero snippets. Run ingest to populate data/processed/snippets.json.");
+      }
+
+      const payload: Record<string, unknown> = {
+        status: warnings.length === 0 ? "ok" : "degraded",
+        server: {
+          name: "deluge-mcp",
+          version: "0.1.0"
+        },
+        timestamp: new Date().toISOString(),
+        uptime_ms: uptimeMs,
+        knowledge: {
+          snippet_count: snippetCount,
+          loaded: snippetCount > 0,
+          source_file: "data/processed/snippets.json"
+        },
+        warnings
+      };
+
+      if (verbose) {
+        payload.tools = ["deluge_health", "deluge_validate", "deluge_fix", "deluge_explain", "deluge_examples"];
+        payload.resources = ["deluge://rules/v1", "deluge://cheatsheet/beginner"];
+      }
+
+      return {
+        structuredContent: payload,
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(payload, null, 2)
+          }
+        ]
+      };
+    }
+  );
+
   server.registerResource(
     "deluge-rules",
     "deluge://rules/v1",
@@ -195,8 +249,19 @@ async function main(): Promise<void> {
   });
 }
 
-main().catch((error: unknown) => {
-  const message = error instanceof Error ? error.stack ?? error.message : String(error);
-  process.stderr.write(`${message}\n`);
-  process.exit(1);
-});
+function isDirectRun(): boolean {
+  const entry = process.argv[1];
+  if (!entry) {
+    return false;
+  }
+  const entryUrl = pathToFileURL(path.resolve(entry)).href;
+  return import.meta.url === entryUrl;
+}
+
+if (isDirectRun()) {
+  main().catch((error: unknown) => {
+    const message = error instanceof Error ? error.stack ?? error.message : String(error);
+    process.stderr.write(`${message}\n`);
+    process.exit(1);
+  });
+}

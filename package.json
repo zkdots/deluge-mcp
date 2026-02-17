@@ -9,6 +9,10 @@
     "start": "node dist/src/index.js",
     "dev": "npm run build && node dist/src/index.js",
     "ingest": "npm run build && node dist/src/ingestion/cli.js",
+    "ingest:oneclick": "bash scripts/ingest-oneclick.sh",
+    "smoke": "npm run build && node scripts/smoke-inmemory.mjs",
+    "smoke:stdio": "npm run build && node scripts/smoke-stdio.mjs",
+    "test:local": "npm run smoke:stdio",
     "test": "npm run build && node --test dist/test/*.test.js"
   },
   "dependencies": {

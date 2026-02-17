@@ -7,6 +7,7 @@ A strict, beginner-friendly MCP server for Deluge syntax support.
 - Strict source curation (`www.zoho.com/deluge/help/**` only)
 - Corrupt/noisy snippet rejection
 - Tooling for:
+  - `deluge_health`
   - `deluge_explain`
   - `deluge_validate`
   - `deluge_fix`
@@ -31,6 +32,12 @@ npm run ingest -- data/raw/context7.md
 
 Output is written to `data/processed/snippets.json`.
 
+One-click helper:
+
+```bash
+npm run ingest:oneclick -- data/raw/context7.md data/processed/snippets.json
+```
+
 ## Run Server
 
 ```bash
@@ -43,6 +50,26 @@ or
 npm run build && npm start
 ```
 
+## Smoke Tests
+
+Primary smoke (in-memory MCP client/server):
+
+```bash
+npm run smoke
+```
+
+Optional stdio smoke (environment-dependent):
+
+```bash
+npm run smoke:stdio
+```
+
+Local test shortcut (runs stdio smoke):
+
+```bash
+npm run test:local
+```
+
 ## Example MCP client config (stdio)
 
 ```json
@@ -50,7 +77,7 @@ npm run build && npm start
   "mcpServers": {
     "deluge": {
       "command": "node",
-      "args": ["/absolute/path/to/deluge-mcp/dist/index.js"]
+      "args": ["/absolute/path/to/deluge-mcp/dist/src/index.js"]
     }
   }
 }
