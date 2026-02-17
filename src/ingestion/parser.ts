@@ -1,4 +1,4 @@
-import { ParsedCodeBlock, ParsedSection } from "../types.js";
+import type { ParsedCodeBlock, ParsedSection } from "../types.js";
 
 export function parseContext7Markdown(markdown: string): ParsedSection[] {
   const lines = markdown.split(/\r?\n/);
@@ -18,7 +18,7 @@ export function parseContext7Markdown(markdown: string): ParsedSection[] {
       title: currentTitle,
       sourceUrl: sourceMatch?.[1],
       rawBody,
-      codeBlocks
+      codeBlocks,
     });
   };
 
@@ -42,12 +42,14 @@ export function parseContext7Markdown(markdown: string): ParsedSection[] {
 function extractCodeBlocks(rawBody: string): ParsedCodeBlock[] {
   const codeBlocks: ParsedCodeBlock[] = [];
   const regex = /```([^\n]*)\n([\s\S]*?)```/g;
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(rawBody)) !== null) {
+  while (true) {
+    const match = regex.exec(rawBody);
+    if (match === null) {
+      break;
+    }
     codeBlocks.push({
       language: (match[1] || "").trim().toLowerCase(),
-      code: match[2].trim()
+      code: match[2].trim(),
     });
   }
 

@@ -30,7 +30,8 @@
     "release:major": "node scripts/release.mjs --type major",
     "release:alpha": "node scripts/release.mjs --type prerelease --preid alpha",
     "release:beta": "node scripts/release.mjs --type prerelease --preid beta",
-    "release:rc": "node scripts/release.mjs --type prerelease --preid rc"
+    "release:rc": "node scripts/release.mjs --type prerelease --preid rc",
+    "labels:sync": "node scripts/sync-labels.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
@@ -44,8 +45,6 @@
     "typescript": "^5.7.3"
   },
   "lint-staged": {
-    "*.{js,mjs,cjs,ts,tsx}": [
-      "biome check --write"
-    ]
+    "*.{js,mjs,cjs,ts,tsx}": ["biome check --write"]
   }
 }

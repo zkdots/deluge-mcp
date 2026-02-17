@@ -28,6 +28,22 @@ Install git hooks (usually auto-run via `prepare` on install):
 npm run prepare
 ```
 
+## Project Governance
+
+Repository policy and contribution docs:
+
+- `CONTRIBUTING.md`
+- `CONTRIBUTORS.md`
+- `SECURITY.md`
+
+GitHub metadata files:
+
+- `.github/CODEOWNERS`
+- `.github/pull_request_template.md`
+- `.github/ISSUE_TEMPLATE/*`
+- `.github/dependabot.yml`
+- `.github/labels.json`
+
 ## Code Quality Automation
 
 This repo uses Biome + lint-staged + Husky:
@@ -53,6 +69,12 @@ Full suite including stdio checks:
 
 ```bash
 npm run verify:full
+```
+
+Sync GitHub labels from repo config:
+
+```bash
+npm run labels:sync
 ```
 
 ## Release

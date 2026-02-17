@@ -1,0 +1,37 @@
+[
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something is broken"
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "New feature or improvement"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Documentation updates"
+  },
+  {
+    "name": "ci",
+    "color": "5319e7",
+    "description": "CI/CD, automation, or tooling"
+  },
+  {
+    "name": "security",
+    "color": "b60205",
+    "description": "Security-related work"
+  },
+  {
+    "name": "good first issue",
+    "color": "7057ff",
+    "description": "Good for first-time contributors"
+  },
+  {
+    "name": "blocked",
+    "color": "000000",
+    "description": "Blocked by external dependency or decision"
+  }
+]
