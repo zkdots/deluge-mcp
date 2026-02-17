@@ -23,7 +23,14 @@
     "test:mcp": "npm run smoke && npm run smoke:matrix",
     "test": "npm run build && node --test dist/test/*.test.js",
     "verify": "npm run test && npm run smoke && npm run smoke:matrix",
-    "verify:full": "npm run verify && npm run smoke:stdio && npm run smoke:matrix:stdio"
+    "verify:full": "npm run verify && npm run smoke:stdio && npm run smoke:matrix:stdio",
+    "release": "node scripts/release.mjs",
+    "release:patch": "node scripts/release.mjs --type patch",
+    "release:minor": "node scripts/release.mjs --type minor",
+    "release:major": "node scripts/release.mjs --type major",
+    "release:alpha": "node scripts/release.mjs --type prerelease --preid alpha",
+    "release:beta": "node scripts/release.mjs --type prerelease --preid beta",
+    "release:rc": "node scripts/release.mjs --type prerelease --preid rc"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",

@@ -55,6 +55,49 @@ Full suite including stdio checks:
 npm run verify:full
 ```
 
+## Release
+
+This repo includes a release helper with flags:
+
+```bash
+npm run release -- --help
+```
+
+Common release commands:
+
+```bash
+npm run release:patch
+npm run release:minor
+npm run release:major
+npm run release:alpha
+npm run release:beta
+npm run release:rc
+```
+
+Flag-based examples:
+
+```bash
+npm run release -- --type prerelease --preid beta
+npm run release -- --type minor --no-push
+npm run release -- --type patch --skip-verify
+npm run release -- --type patch --dry-run
+```
+
+Supported flags:
+
+- `--type <patch|minor|major|prerelease>`
+- `--preid <alpha|beta|rc|...>` (used with `--type prerelease`)
+- `--skip-verify` (skip `npm run verify`)
+- `--no-push` (create version commit/tag locally only)
+- `--allow-dirty` (allow release on dirty working tree)
+- `--remote <name>` (default `origin`)
+- `--dry-run` (print planned commands only)
+
+Notes:
+
+- Release flow runs `npm version ...` (creates commit + tag), then pushes branch and tags.
+- This package is marked `"private": true`, so this flow manages git versions/tags, not npm publish.
+
 ## Ingest Context Data
 
 Place your Context7 export in `data/raw/context7.md` and run:
