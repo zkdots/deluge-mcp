@@ -22,6 +22,39 @@ A strict, beginner-friendly MCP server for Deluge syntax support.
 npm install
 ```
 
+Install git hooks (usually auto-run via `prepare` on install):
+
+```bash
+npm run prepare
+```
+
+## Code Quality Automation
+
+This repo uses Biome + lint-staged + Husky:
+
+- Pre-commit hook runs on staged `*.ts|*.tsx|*.js|*.mjs|*.cjs`
+- Each staged file is linted and auto-formatted via `biome check --write`
+
+Manual commands:
+
+```bash
+npm run lint
+npm run lint:fix
+npm run format
+```
+
+Single command for the stable full suite:
+
+```bash
+npm run verify
+```
+
+Full suite including stdio checks:
+
+```bash
+npm run verify:full
+```
+
 ## Ingest Context Data
 
 Place your Context7 export in `data/raw/context7.md` and run:

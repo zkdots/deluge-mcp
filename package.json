@@ -5,11 +5,15 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "prepare": "husky",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/src/index.js",
     "dev": "npm run build && node dist/src/index.js",
     "ingest": "npm run build && node dist/src/ingestion/cli.js",
     "ingest:oneclick": "bash scripts/ingest-oneclick.sh",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
     "smoke": "npm run build && node scripts/smoke-inmemory.mjs",
     "smoke:stdio": "npm run build && node scripts/smoke-stdio.mjs",
     "smoke:matrix": "npm run build && node scripts/smoke-matrix.mjs",
@@ -17,14 +21,24 @@
     "diagnose:stdio": "npm run build && node scripts/diagnose-stdio.mjs",
     "test:local": "npm run smoke:stdio",
     "test:mcp": "npm run smoke && npm run smoke:matrix",
-    "test": "npm run build && node --test dist/test/*.test.js"
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "verify": "npm run test && npm run smoke && npm run smoke:matrix",
+    "verify:full": "npm run verify && npm run smoke:stdio && npm run smoke:matrix:stdio"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "^22.13.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "typescript": "^5.7.3"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,tsx}": [
+      "biome check --write"
+    ]
   }
 }
