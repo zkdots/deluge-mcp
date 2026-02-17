@@ -20,10 +20,10 @@ async function main(): Promise<void> {
         policy: {
           host: "www.zoho.com",
           pathPrefix: "/deluge/help/",
-          strictAllowlist: true
+          strictAllowlist: true,
         },
         summary,
-        snippets
+        snippets,
       },
       null,
       2

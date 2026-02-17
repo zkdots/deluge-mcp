@@ -1,6 +1,9 @@
-import { FixChange } from "../types.js";
+import type { FixChange } from "../types.js";
 
-export function fixDeluge(code: string, style: "minimal-change" | "readable" = "minimal-change"): { fixedCode: string; changes: FixChange[] } {
+export function fixDeluge(
+  code: string,
+  style: "minimal-change" | "readable" = "minimal-change"
+): { fixedCode: string; changes: FixChange[] } {
   const lines = code.split(/\r?\n/);
   const changes: FixChange[] = [];
 
@@ -52,7 +55,7 @@ function closeUnmatchedBraces(code: string, changes: FixChange[]): string {
   changes.push({
     before: "<eof>",
     after: "}".repeat(missing),
-    reason: "Added missing closing brace(s)."
+    reason: "Added missing closing brace(s).",
   });
 
   return fixed;

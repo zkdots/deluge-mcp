@@ -1,16 +1,7 @@
 {
   "name": "default-smoke",
-  "requiredTools": [
-    "deluge_health",
-    "deluge_validate",
-    "deluge_fix",
-    "deluge_explain",
-    "deluge_examples"
-  ],
-  "requiredResources": [
-    "deluge://rules/v1",
-    "deluge://cheatsheet/beginner"
-  ],
+  "requiredTools": ["deluge_health", "deluge_validate", "deluge_fix", "deluge_explain", "deluge_examples"],
+  "requiredResources": ["deluge://rules/v1", "deluge://cheatsheet/beginner"],
   "steps": [
     {
       "name": "health",
@@ -20,9 +11,7 @@
       "assert": {
         "isError": false,
         "structuredHasKeys": ["status", "knowledge", "server", "uptime_ms"],
-        "structuredPathEqualsOneOf": [
-          { "path": "status", "oneOf": ["ok", "degraded"] }
-        ]
+        "structuredPathEqualsOneOf": [{ "path": "status", "oneOf": ["ok", "degraded"] }]
       }
     },
     {

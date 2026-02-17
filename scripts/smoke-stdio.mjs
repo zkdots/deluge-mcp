@@ -8,7 +8,7 @@ async function main() {
     command: "node",
     args: ["dist/src/index.js"],
     cwd: process.cwd(),
-    stderr: "pipe"
+    stderr: "pipe",
   });
 
   transport.stderr?.on("data", (chunk) => {
@@ -23,14 +23,22 @@ async function main() {
   await client.connect(transport, requestOptions);
   const tools = await client.listTools(undefined, requestOptions);
   const names = tools.tools.map((t) => t.name);
-  const health = await client.callTool({
-    name: "deluge_health",
-    arguments: { verbose: true }
-  }, undefined, requestOptions);
-  const validate = await client.callTool({
-    name: "deluge_validate",
-    arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);' }
-  }, undefined, requestOptions);
+  const health = await client.callTool(
+    {
+      name: "deluge_health",
+      arguments: { verbose: true },
+    },
+    undefined,
+    requestOptions
+  );
+  const validate = await client.callTool(
+    {
+      name: "deluge_validate",
+      arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);' },
+    },
+    undefined,
+    requestOptions
+  );
 
   console.log("stdio smoke OK, tools:", names.join(", "));
   console.log("health content type:", health.content?.[0]?.type ?? "none");

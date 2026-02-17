@@ -1,6 +1,9 @@
-import { ValidationResult } from "../types.js";
+import type { ValidationResult } from "../types.js";
 
-export function explainDeluge(code: string, validation: ValidationResult): { summary: string; lineByLine: string[]; keyRules: string[] } {
+export function explainDeluge(
+  code: string,
+  validation: ValidationResult
+): { summary: string; lineByLine: string[]; keyRules: string[] } {
   const lineByLine = code
     .split(/\r?\n/)
     .map((line, idx) => `L${idx + 1}: ${line.trim() || "(blank)"}`)
@@ -11,7 +14,7 @@ export function explainDeluge(code: string, validation: ValidationResult): { sum
     "Use explicit semicolons for consistency",
     "Treat map keys as case-sensitive",
     "Verify list indexes before using get(index)",
-    "Use `info` for simple debug output"
+    "Use `info` for simple debug output",
   ];
 
   const summary = validation.valid
@@ -21,6 +24,6 @@ export function explainDeluge(code: string, validation: ValidationResult): { sum
   return {
     summary,
     lineByLine,
-    keyRules
+    keyRules,
   };
 }

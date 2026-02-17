@@ -1,10 +1,13 @@
 import { createHash } from "node:crypto";
-import { ParsedCodeBlock, ParsedSection, ProcessedSnippet, IngestionSummary } from "../types.js";
+import type { IngestionSummary, ParsedCodeBlock, ParsedSection, ProcessedSnippet } from "../types.js";
 
 const TRUSTED_HOST = "www.zoho.com";
 const TRUSTED_PATH_PREFIX = "/deluge/help/";
 
-export function sanitizeSectionsStrict(sections: ParsedSection[]): { snippets: ProcessedSnippet[]; summary: IngestionSummary } {
+export function sanitizeSectionsStrict(sections: ParsedSection[]): {
+  snippets: ProcessedSnippet[];
+  summary: IngestionSummary;
+} {
   const summary: IngestionSummary = {
     inputSections: sections.length,
     keptSnippets: 0,
@@ -13,8 +16,8 @@ export function sanitizeSectionsStrict(sections: ParsedSection[]): { snippets: P
       noCode: 0,
       notDelugeLike: 0,
       noisy: 0,
-      duplicate: 0
-    }
+      duplicate: 0,
+    },
   };
 
   const snippets: ProcessedSnippet[] = [];
@@ -67,7 +70,7 @@ export function sanitizeSectionsStrict(sections: ParsedSection[]): { snippets: P
         explanation: toShortExplanation(section.rawBody),
         qualityScore,
         flags: qualityScore < 0.7 ? ["low-confidence"] : [],
-        ingestedAt: new Date().toISOString()
+        ingestedAt: new Date().toISOString(),
       });
     }
   }
@@ -100,7 +103,7 @@ function isDelugeLikeBlock(title: string, block: ParsedCodeBlock): boolean {
     /\binvokeurl\b/,
     /\.get\(/,
     /\bif\s*\(/,
-    /\bfor each\b/
+    /\bfor each\b/,
   ];
   return signals.some((pattern) => pattern.test(text));
 }
@@ -120,7 +123,7 @@ function isNoisyOrCorrupt(code: string): boolean {
     return true;
   }
 
-  const nonAlnumRatio = ratio(code, /[^a-zA-Z0-9\s\n\t\[\]\{\}\(\)\.,;:_"'\-\/]/g);
+  const nonAlnumRatio = ratio(code, /[^a-zA-Z0-9\s\n\t[\]{}().,;:_"'\-/]/g);
   if (nonAlnumRatio > 0.28) {
     return true;
   }

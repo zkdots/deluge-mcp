@@ -1,7 +1,7 @@
-import test from "node:test";
 import assert from "node:assert/strict";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import test from "node:test";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../src/index.js";
 
 test("health tool returns status and knowledge metadata", async () => {
@@ -14,7 +14,7 @@ test("health tool returns status and knowledge metadata", async () => {
 
   const result = await client.callTool({
     name: "deluge_health",
-    arguments: { verbose: true }
+    arguments: { verbose: true },
   });
 
   assert.ok(result.structuredContent);

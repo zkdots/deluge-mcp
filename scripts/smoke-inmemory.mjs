@@ -1,5 +1,5 @@
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../dist/src/index.js";
 
 async function main() {
@@ -22,22 +22,22 @@ async function main() {
 
   const healthResult = await client.callTool({
     name: "deluge_health",
-    arguments: { verbose: true }
+    arguments: { verbose: true },
   });
 
   const validateResult = await client.callTool({
     name: "deluge_validate",
-    arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);' }
+    arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);' },
   });
 
   const fixResult = await client.callTool({
     name: "deluge_fix",
-    arguments: { code: "a = 1\ninfo a", style: "minimal-change" }
+    arguments: { code: "a = 1\ninfo a", style: "minimal-change" },
   });
 
   const examplesResult = await client.callTool({
     name: "deluge_examples",
-    arguments: { topic: "get", difficulty: "beginner" }
+    arguments: { topic: "get", difficulty: "beginner" },
   });
 
   const rules = await client.readResource({ uri: "deluge://rules/v1" });

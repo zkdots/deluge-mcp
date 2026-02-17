@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { ProcessedSnippet } from "../types.js";
+import type { ProcessedSnippet } from "../types.js";
 
 interface SnippetFile {
   snippets: ProcessedSnippet[];
@@ -27,7 +27,12 @@ export class KnowledgeStore {
     const normalized = topic.trim().toLowerCase();
     return this.snippets
       .filter((s) => s.qualityScore >= 0.7)
-      .filter((s) => s.topic.toLowerCase().includes(normalized) || s.functionName.toLowerCase().includes(normalized) || s.title.toLowerCase().includes(normalized))
+      .filter(
+        (s) =>
+          s.topic.toLowerCase().includes(normalized) ||
+          s.functionName.toLowerCase().includes(normalized) ||
+          s.title.toLowerCase().includes(normalized)
+      )
       .slice(0, limit);
   }
 

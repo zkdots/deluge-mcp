@@ -1,7 +1,7 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { KnowledgeStore } from "./knowledge/store.js";
 import { getBeginnerCheatsheet } from "./resources/cheatsheet.js";
@@ -18,7 +18,7 @@ export async function createServer(): Promise<McpServer> {
 
   const server = new McpServer({
     name: "deluge-mcp",
-    version: "0.1.0"
+    version: "0.1.0",
   });
 
   server.registerTool(
@@ -28,8 +28,8 @@ export async function createServer(): Promise<McpServer> {
       description: "Validate Deluge syntax and common runtime-risk patterns.",
       inputSchema: {
         code: z.string().min(1),
-        strict: z.boolean().optional()
-      }
+        strict: z.boolean().optional(),
+      },
     },
     async ({ code, strict }) => {
       const result = validateDeluge(code, strict ?? true);
@@ -38,9 +38,9 @@ export async function createServer(): Promise<McpServer> {
         content: [
           {
             type: "text",
-            text: JSON.stringify(result, null, 2)
-          }
-        ]
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
       };
     }
   );
@@ -52,22 +52,22 @@ export async function createServer(): Promise<McpServer> {
       description: "Apply safe, minimal Deluge syntax fixes.",
       inputSchema: {
         code: z.string().min(1),
-        style: z.enum(["minimal-change", "readable"]).optional()
-      }
+        style: z.enum(["minimal-change", "readable"]).optional(),
+      },
     },
     async ({ code, style }) => {
       const fixed = fixDeluge(code, style ?? "minimal-change");
       return {
         structuredContent: {
           fixed_code: fixed.fixedCode,
-          changes: fixed.changes
+          changes: fixed.changes,
         },
         content: [
           {
             type: "text",
-            text: fixed.fixedCode
-          }
-        ]
+            text: fixed.fixedCode,
+          },
+        ],
       };
     }
   );
@@ -79,8 +79,8 @@ export async function createServer(): Promise<McpServer> {
       description: "Explain Deluge snippet in beginner-friendly language.",
       inputSchema: {
         code: z.string().min(1),
-        level: z.enum(["beginner", "intermediate"]).optional()
-      }
+        level: z.enum(["beginner", "intermediate"]).optional(),
+      },
     },
     async ({ code }) => {
       const validation = validateDeluge(code, true);
@@ -91,14 +91,14 @@ export async function createServer(): Promise<McpServer> {
           summary: explanation.summary,
           line_by_line: explanation.lineByLine,
           key_rules: explanation.keyRules,
-          references
+          references,
         },
         content: [
           {
             type: "text",
-            text: `${explanation.summary}\n\n${explanation.keyRules.map((r) => `- ${r}`).join("\n")}`
-          }
-        ]
+            text: `${explanation.summary}\n\n${explanation.keyRules.map((r) => `- ${r}`).join("\n")}`,
+          },
+        ],
       };
     }
   );
@@ -110,15 +110,15 @@ export async function createServer(): Promise<McpServer> {
       description: "Return high-confidence Deluge examples by topic.",
       inputSchema: {
         topic: z.string().min(1),
-        difficulty: z.enum(["beginner", "intermediate"]).optional()
-      }
+        difficulty: z.enum(["beginner", "intermediate"]).optional(),
+      },
     },
     async ({ topic }) => {
       const examples = store.findByTopic(topic, 5).map((s) => ({
         title: s.title,
         code: s.code,
         notes: s.explanation,
-        source: s.sourceUrl
+        source: s.sourceUrl,
       }));
 
       return {
@@ -126,9 +126,12 @@ export async function createServer(): Promise<McpServer> {
         content: [
           {
             type: "text",
-            text: examples.length === 0 ? "No high-confidence examples found for this topic." : JSON.stringify(examples, null, 2)
-          }
-        ]
+            text:
+              examples.length === 0
+                ? "No high-confidence examples found for this topic."
+                : JSON.stringify(examples, null, 2),
+          },
+        ],
       };
     }
   );
@@ -139,8 +142,8 @@ export async function createServer(): Promise<McpServer> {
       title: "Deluge MCP Health",
       description: "Report runtime health, uptime, and knowledge base availability.",
       inputSchema: {
-        verbose: z.boolean().optional()
-      }
+        verbose: z.boolean().optional(),
+      },
     },
     async ({ verbose }) => {
       const uptimeMs = Date.now() - serverStartMs;
@@ -154,16 +157,16 @@ export async function createServer(): Promise<McpServer> {
         status: warnings.length === 0 ? "ok" : "degraded",
         server: {
           name: "deluge-mcp",
-          version: "0.1.0"
+          version: "0.1.0",
         },
         timestamp: new Date().toISOString(),
         uptime_ms: uptimeMs,
         knowledge: {
           snippet_count: snippetCount,
           loaded: snippetCount > 0,
-          source_file: "data/processed/snippets.json"
+          source_file: "data/processed/snippets.json",
         },
-        warnings
+        warnings,
       };
 
       if (verbose) {
@@ -176,9 +179,9 @@ export async function createServer(): Promise<McpServer> {
         content: [
           {
             type: "text",
-            text: JSON.stringify(payload, null, 2)
-          }
-        ]
+            text: JSON.stringify(payload, null, 2),
+          },
+        ],
       };
     }
   );
@@ -189,7 +192,7 @@ export async function createServer(): Promise<McpServer> {
     {
       title: "Deluge Rules v1",
       description: "Validation rules used by deluge-mcp.",
-      mimeType: "application/json"
+      mimeType: "application/json",
     },
     async () => {
       const body = JSON.stringify(getRulesResource(), null, 2);
@@ -198,9 +201,9 @@ export async function createServer(): Promise<McpServer> {
           {
             uri: "deluge://rules/v1",
             mimeType: "application/json",
-            text: body
-          }
-        ]
+            text: body,
+          },
+        ],
       };
     }
   );
@@ -211,7 +214,7 @@ export async function createServer(): Promise<McpServer> {
     {
       title: "Deluge Beginner Cheatsheet",
       description: "Short Deluge syntax cheatsheet for non-programmers.",
-      mimeType: "text/plain"
+      mimeType: "text/plain",
     },
     async () => {
       return {
@@ -219,9 +222,9 @@ export async function createServer(): Promise<McpServer> {
           {
             uri: "deluge://cheatsheet/beginner",
             mimeType: "text/plain",
-            text: getBeginnerCheatsheet()
-          }
-        ]
+            text: getBeginnerCheatsheet(),
+          },
+        ],
       };
     }
   );
@@ -260,7 +263,7 @@ function isDirectRun(): boolean {
 
 if (isDirectRun()) {
   main().catch((error: unknown) => {
-    const message = error instanceof Error ? error.stack ?? error.message : String(error);
+    const message = error instanceof Error ? (error.stack ?? error.message) : String(error);
     process.stderr.write(`${message}\n`);
     process.exit(1);
   });

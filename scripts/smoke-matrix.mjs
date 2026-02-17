@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../dist/src/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,7 +40,7 @@ async function startWithTransport(transportMode) {
       close: async () => {
         await client.close();
         await server.close();
-      }
+      },
     };
   }
 
@@ -49,7 +49,7 @@ async function startWithTransport(transportMode) {
       command: "node",
       args: ["dist/src/index.js"],
       cwd: process.cwd(),
-      stderr: "pipe"
+      stderr: "pipe",
     });
 
     transport.stderr?.on("data", (chunk) => {
@@ -67,7 +67,7 @@ async function startWithTransport(transportMode) {
       close: async () => {
         await client.close();
         await transport.close();
-      }
+      },
     };
   }
 
@@ -87,7 +87,7 @@ function assertToolResult(step, result) {
   if (Array.isArray(rules.structuredHasKeys)) {
     const sc = result?.structuredContent;
     for (const key of rules.structuredHasKeys) {
-      if (!(sc && Object.prototype.hasOwnProperty.call(sc, key))) {
+      if (!(sc && Object.hasOwn(sc, key))) {
         fail(`[${step.name}] missing structuredContent key: ${key}`);
       }
     }
@@ -98,7 +98,9 @@ function assertToolResult(step, result) {
     for (const check of rules.structuredPathEqualsOneOf) {
       const value = readPath(sc, check.path);
       if (!check.oneOf.includes(value)) {
-        fail(`[${step.name}] expected path '${check.path}' in ${JSON.stringify(check.oneOf)}, got ${JSON.stringify(value)}`);
+        fail(
+          `[${step.name}] expected path '${check.path}' in ${JSON.stringify(check.oneOf)}, got ${JSON.stringify(value)}`
+        );
       }
     }
   }
@@ -164,7 +166,11 @@ async function main() {
 
     for (const step of scenario.steps || []) {
       if (step.type === "tool") {
-        const result = await client.callTool({ name: step.tool, arguments: step.args || {} }, undefined, requestOptions);
+        const result = await client.callTool(
+          { name: step.tool, arguments: step.args || {} },
+          undefined,
+          requestOptions
+        );
         assertToolResult(step, result);
         results.push({ name: step.name, status: "pass" });
         continue;

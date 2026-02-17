@@ -1,4 +1,4 @@
-import { Diagnostic, ValidationResult } from "../types.js";
+import type { Diagnostic, ValidationResult } from "../types.js";
 
 export function validateDeluge(code: string, strict = true): ValidationResult {
   const diagnostics: Diagnostic[] = [];
@@ -18,7 +18,7 @@ export function validateDeluge(code: string, strict = true): ValidationResult {
   return {
     valid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
@@ -26,7 +26,7 @@ function checkBalance(code: string, diagnostics: Diagnostic[]): void {
   const pairs: Record<string, string> = {
     ")": "(",
     "}": "{",
-    "]": "["
+    "]": "[",
   };
 
   const openings = new Set(Object.values(pairs));
@@ -56,7 +56,7 @@ function checkBalance(code: string, diagnostics: Diagnostic[]): void {
         diagnostics.push({
           message: `Unmatched '${ch}' detected.`,
           ruleId: "syntax.unmatched_delimiter",
-          severity: "error"
+          severity: "error",
         });
         return;
       }
@@ -68,7 +68,7 @@ function checkBalance(code: string, diagnostics: Diagnostic[]): void {
     diagnostics.push({
       message: "Unclosed string literal detected.",
       ruleId: "syntax.unclosed_string",
-      severity: "error"
+      severity: "error",
     });
   }
 
@@ -76,7 +76,7 @@ function checkBalance(code: string, diagnostics: Diagnostic[]): void {
     diagnostics.push({
       message: `Unclosed delimiter '${stack[stack.length - 1].ch}' detected.`,
       ruleId: "syntax.unclosed_delimiter",
-      severity: "error"
+      severity: "error",
     });
   }
 }
@@ -106,7 +106,7 @@ function checkLiteralGetBounds(lines: string[], diagnostics: Diagnostic[]): void
           line: i + 1,
           message: `Index ${idx} may exceed list size ${size - 1} for '${varName}'.`,
           ruleId: "runtime.index_out_of_bounds",
-          severity: "error"
+          severity: "error",
         });
       }
     }
@@ -115,8 +115,12 @@ function checkLiteralGetBounds(lines: string[], diagnostics: Diagnostic[]): void
 
 function checkLikelyTypos(lines: string[], diagnostics: Diagnostic[]): void {
   const typoPatterns: Array<{ re: RegExp; msg: string; ruleId: string }> = [
-    { re: /\bfor\s+each\w+/i, msg: "Likely missing space in 'for each' loop declaration.", ruleId: "syntax.for_each_spacing" },
-    { re: /\bif\s*\([^\)]*$/i, msg: "Likely incomplete if-condition.", ruleId: "syntax.if_incomplete" }
+    {
+      re: /\bfor\s+each\w+/i,
+      msg: "Likely missing space in 'for each' loop declaration.",
+      ruleId: "syntax.for_each_spacing",
+    },
+    { re: /\bif\s*\([^)]*$/i, msg: "Likely incomplete if-condition.", ruleId: "syntax.if_incomplete" },
   ];
 
   for (let i = 0; i < lines.length; i += 1) {
@@ -127,7 +131,7 @@ function checkLikelyTypos(lines: string[], diagnostics: Diagnostic[]): void {
           line: i + 1,
           message: typo.msg,
           ruleId: typo.ruleId,
-          severity: "warning"
+          severity: "warning",
         });
       }
     }
@@ -150,7 +154,7 @@ function checkSemicolonStyle(lines: string[], diagnostics: Diagnostic[]): void {
       line: i + 1,
       message: "Missing semicolon for consistency with Deluge examples.",
       ruleId: "style.semicolon",
-      severity: "warning"
+      severity: "warning",
     });
   }
 }

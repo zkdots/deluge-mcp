@@ -70,7 +70,7 @@ async function main() {
     command,
     args,
     cwd,
-    stderr: "pipe"
+    stderr: "pipe",
   });
 
   let stderrBytes = 0;
@@ -96,7 +96,11 @@ async function main() {
     }
 
     const listTools = await runStep("listTools", () => client.listTools(undefined, options));
-    summary.push({ step: "listTools", ok: listTools.ok, tools: listTools.ok ? listTools.value.tools.length : undefined });
+    summary.push({
+      step: "listTools",
+      ok: listTools.ok,
+      tools: listTools.ok ? listTools.value.tools.length : undefined,
+    });
 
     const readRules = await runStep("readResource deluge://rules/v1", () =>
       client.readResource({ uri: "deluge://rules/v1" }, options)
@@ -104,7 +108,7 @@ async function main() {
     summary.push({
       step: "readResource.rules",
       ok: readRules.ok,
-      resources: readRules.ok ? readRules.value.contents.length : undefined
+      resources: readRules.ok ? readRules.value.contents.length : undefined,
     });
 
     const health = await runStep("callTool deluge_health", () =>
@@ -116,7 +120,7 @@ async function main() {
       client.callTool(
         {
           name: "deluge_validate",
-          arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);', strict: true }
+          arguments: { code: 'listVar = {"A", "B"};\nvalue = listVar.get(2);', strict: true },
         },
         undefined,
         options

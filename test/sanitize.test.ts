@@ -1,5 +1,5 @@
-import test from "node:test";
 import assert from "node:assert/strict";
+import test from "node:test";
 import { parseContext7Markdown } from "../src/ingestion/parser.js";
 import { sanitizeSectionsStrict } from "../src/ingestion/sanitize.js";
 
