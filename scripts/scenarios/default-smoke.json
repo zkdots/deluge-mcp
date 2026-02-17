@@ -1,0 +1,84 @@
+{
+  "name": "default-smoke",
+  "requiredTools": [
+    "deluge_health",
+    "deluge_validate",
+    "deluge_fix",
+    "deluge_explain",
+    "deluge_examples"
+  ],
+  "requiredResources": [
+    "deluge://rules/v1",
+    "deluge://cheatsheet/beginner"
+  ],
+  "steps": [
+    {
+      "name": "health",
+      "type": "tool",
+      "tool": "deluge_health",
+      "args": { "verbose": true },
+      "assert": {
+        "isError": false,
+        "structuredHasKeys": ["status", "knowledge", "server", "uptime_ms"],
+        "structuredPathEqualsOneOf": [
+          { "path": "status", "oneOf": ["ok", "degraded"] }
+        ]
+      }
+    },
+    {
+      "name": "validate-bounds",
+      "type": "tool",
+      "tool": "deluge_validate",
+      "args": {
+        "code": "listVar = {\"A\", \"B\"};\nvalue = listVar.get(2);",
+        "strict": true
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["runtime.index_out_of_bounds"]
+      }
+    },
+    {
+      "name": "fix-semicolon",
+      "type": "tool",
+      "tool": "deluge_fix",
+      "args": {
+        "code": "a = 1\ninfo a",
+        "style": "minimal-change"
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["a = 1;", "info a;"]
+      }
+    },
+    {
+      "name": "examples-get",
+      "type": "tool",
+      "tool": "deluge_examples",
+      "args": {
+        "topic": "get",
+        "difficulty": "beginner"
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["title", "source"]
+      }
+    },
+    {
+      "name": "rules-resource",
+      "type": "resource",
+      "uri": "deluge://rules/v1",
+      "assert": {
+        "resourceTextIncludes": ["Deluge Syntax Rules", "sourceAllowlist"]
+      }
+    },
+    {
+      "name": "cheatsheet-resource",
+      "type": "resource",
+      "uri": "deluge://cheatsheet/beginner",
+      "assert": {
+        "resourceTextIncludes": ["Deluge Beginner Cheatsheet", "map", "if"]
+      }
+    }
+  ]
+}

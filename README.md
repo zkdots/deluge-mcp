@@ -64,13 +64,74 @@ Optional stdio smoke (environment-dependent):
 npm run smoke:stdio
 ```
 
+Matrix smoke (extensible scenario-based checks):
+
+```bash
+npm run smoke:matrix
+```
+
+Matrix smoke over stdio:
+
+```bash
+npm run smoke:matrix:stdio
+```
+
+Deep stdio diagnosis (pinpoints failing step):
+
+```bash
+npm run diagnose:stdio
+```
+
+Diagnose against a specific cwd/timeout:
+
+```bash
+npm run diagnose:stdio -- --cwd /absolute/path/to/project --timeout 180000
+```
+
+Diagnose an MCP config that starts with npm:
+
+```bash
+npm run diagnose:stdio -- --command npm --args-json '["run","dev"]' --cwd /absolute/path/to/project
+```
+
+Run a custom scenario file:
+
+```bash
+npm run build
+node scripts/smoke-matrix.mjs --scenario scripts/scenarios/default-smoke.json
+```
+
 Local test shortcut (runs stdio smoke):
 
 ```bash
 npm run test:local
 ```
 
+Run both core smoke and matrix smoke:
+
+```bash
+npm run test:mcp
+```
+
 ## Example MCP client config (stdio)
+
+```json
+{
+  "mcpServers": {
+    "deluge": {
+      "command": "node",
+      "args": ["/absolute/path/to/deluge-mcp/dist/src/index.js"]
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+If you see `ENOENT` or `Could not read package.json`, your MCP client is running the command in the wrong working directory.
+
+- If using `npm run dev`, set the MCP server `cwd` to this repo root.
+- For a portable setup, prefer direct node command:
 
 ```json
 {

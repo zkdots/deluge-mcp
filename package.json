@@ -12,7 +12,11 @@
     "ingest:oneclick": "bash scripts/ingest-oneclick.sh",
     "smoke": "npm run build && node scripts/smoke-inmemory.mjs",
     "smoke:stdio": "npm run build && node scripts/smoke-stdio.mjs",
+    "smoke:matrix": "npm run build && node scripts/smoke-matrix.mjs",
+    "smoke:matrix:stdio": "npm run build && node scripts/smoke-matrix.mjs --transport stdio",
+    "diagnose:stdio": "npm run build && node scripts/diagnose-stdio.mjs",
     "test:local": "npm run smoke:stdio",
+    "test:mcp": "npm run smoke && npm run smoke:matrix",
     "test": "npm run build && node --test dist/test/*.test.js"
   },
   "dependencies": {
