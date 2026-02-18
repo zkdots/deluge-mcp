@@ -37,10 +37,11 @@ async function main() {
 
   const examplesResult = await client.callTool({
     name: "deluge_examples",
-    arguments: { topic: "get", difficulty: "beginner" },
+    arguments: { topic: "get", query: "map get", max_results: 3, require_source_allowlist: true },
   });
 
   const rules = await client.readResource({ uri: "deluge://rules/v1" });
+  const topics = await client.readResource({ uri: "deluge://topics/v1" });
 
   console.log("Smoke OK");
   console.log("Tools:", names.join(", "));
@@ -49,6 +50,7 @@ async function main() {
   console.log("Fix content type:", fixResult.content?.[0]?.type ?? "none");
   console.log("Examples content type:", examplesResult.content?.[0]?.type ?? "none");
   console.log("Resource count:", Array.isArray(rules.contents) ? rules.contents.length : 0);
+  console.log("Topics resource count:", Array.isArray(topics.contents) ? topics.contents.length : 0);
 
   await client.close();
   await server.close();

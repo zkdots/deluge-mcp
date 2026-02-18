@@ -26,6 +26,9 @@ test("health tool returns status and knowledge metadata", async () => {
   const knowledge = payload.knowledge as Record<string, unknown>;
   assert.equal(typeof knowledge.snippet_count, "number");
   assert.equal(typeof knowledge.loaded, "boolean");
+  assert.equal(typeof knowledge.deduped_count, "number");
+  assert.equal(typeof knowledge.topic_count, "number");
+  assert.equal(typeof knowledge.index_version, "string");
 
   await client.close();
   await server.close();

@@ -15,6 +15,7 @@ A strict, beginner-friendly MCP server for Deluge syntax support.
 - MCP resources:
   - `deluge://rules/v1`
   - `deluge://cheatsheet/beginner`
+  - `deluge://topics/v1`
 
 ## Setup
 
@@ -166,6 +167,12 @@ Matrix smoke (extensible scenario-based checks):
 
 ```bash
 npm run smoke:matrix
+```
+
+Retrieval quality scenario:
+
+```bash
+npm run smoke:retrieval
 ```
 
 Matrix smoke over stdio:

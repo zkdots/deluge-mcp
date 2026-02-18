@@ -10,15 +10,17 @@ import { explainDeluge } from "./tools/explainer.js";
 import { fixDeluge } from "./tools/fixer.js";
 import { validateDeluge } from "./tools/validator.js";
 
+const SERVER_VERSION = "0.1.1-beta.0";
+
 export async function createServer(): Promise<McpServer> {
   const serverStartMs = Date.now();
   const store = new KnowledgeStore();
   await store.load();
-  const snippetCount = store.all().length;
+  const stats = store.getStats();
 
   const server = new McpServer({
     name: "deluge-mcp",
-    version: "0.1.0",
+    version: SERVER_VERSION,
   });
 
   server.registerTool(
@@ -107,22 +109,52 @@ export async function createServer(): Promise<McpServer> {
     "deluge_examples",
     {
       title: "Deluge Examples",
-      description: "Return high-confidence Deluge examples by topic.",
+      description: "Return ranked, high-confidence Deluge examples by topic/query with safety filters.",
       inputSchema: {
-        topic: z.string().min(1),
+        topic: z.string().min(1).optional(),
+        query: z.string().min(1).optional(),
+        max_results: z.number().int().min(1).max(20).optional(),
+        service_scope: z.string().min(1).optional(),
+        require_source_allowlist: z.boolean().optional(),
+        include_match_debug: z.boolean().optional(),
         difficulty: z.enum(["beginner", "intermediate"]).optional(),
       },
     },
-    async ({ topic }) => {
-      const examples = store.findByTopic(topic, 5).map((s) => ({
-        title: s.title,
-        code: s.code,
-        notes: s.explanation,
-        source: s.sourceUrl,
+    async ({ topic, query, max_results, service_scope, require_source_allowlist, include_match_debug }) => {
+      const matches = store.searchExamples({
+        topic,
+        query,
+        maxResults: max_results,
+        serviceScope: service_scope,
+        requireSourceAllowlist: require_source_allowlist,
+        includeMatchDebug: include_match_debug,
+      });
+      const examples = matches.map((match) => ({
+        title: match.snippet.title,
+        code: match.snippet.code,
+        notes: match.snippet.explanation,
+        source: match.snippet.sourceUrl,
+        function_name: match.snippet.functionName,
+        topic: match.snippet.topic,
+        service_scope: match.snippet.serviceScope,
+        score: match.score,
+        match_reasons: match.matchReasons,
+        snippet_id: match.snippet.snippetId ?? match.snippet.id,
+        source_confidence: match.sourceConfidence,
+        dedupe_group: match.dedupeGroup,
+        debug: include_match_debug ? match.debug : undefined,
       }));
 
       return {
-        structuredContent: { examples },
+        structuredContent: {
+          search: {
+            topic: topic ?? null,
+            query: query ?? null,
+            service_scope: service_scope ?? null,
+            require_source_allowlist: require_source_allowlist ?? true,
+          },
+          examples,
+        },
         content: [
           {
             type: "text",
@@ -149,7 +181,7 @@ export async function createServer(): Promise<McpServer> {
       const uptimeMs = Date.now() - serverStartMs;
       const warnings: string[] = [];
 
-      if (snippetCount === 0) {
+      if (stats.raw_count === 0) {
         warnings.push("Knowledge base has zero snippets. Run ingest to populate data/processed/snippets.json.");
       }
 
@@ -157,21 +189,27 @@ export async function createServer(): Promise<McpServer> {
         status: warnings.length === 0 ? "ok" : "degraded",
         server: {
           name: "deluge-mcp",
-          version: "0.1.0",
+          version: SERVER_VERSION,
         },
         timestamp: new Date().toISOString(),
         uptime_ms: uptimeMs,
         knowledge: {
-          snippet_count: snippetCount,
-          loaded: snippetCount > 0,
-          source_file: "data/processed/snippets.json",
+          snippet_count: stats.raw_count,
+          deduped_count: stats.deduped_count,
+          high_confidence_count: stats.high_confidence_count,
+          topic_count: stats.topic_count,
+          loaded: stats.raw_count > 0,
+          source_file: stats.source_file,
+          indexed_at: stats.indexed_at,
+          index_version: stats.index_version,
         },
         warnings,
       };
 
       if (verbose) {
         payload.tools = ["deluge_health", "deluge_validate", "deluge_fix", "deluge_explain", "deluge_examples"];
-        payload.resources = ["deluge://rules/v1", "deluge://cheatsheet/beginner"];
+        payload.resources = ["deluge://rules/v1", "deluge://cheatsheet/beginner", "deluge://topics/v1"];
+        payload.top_topics = store.listTopics(10);
       }
 
       return {
@@ -200,6 +238,37 @@ export async function createServer(): Promise<McpServer> {
         contents: [
           {
             uri: "deluge://rules/v1",
+            mimeType: "application/json",
+            text: body,
+          },
+        ],
+      };
+    }
+  );
+
+  server.registerResource(
+    "deluge-topics",
+    "deluge://topics/v1",
+    {
+      title: "Deluge Topics Index",
+      description: "Indexed topics derived from the local curated Deluge knowledge base.",
+      mimeType: "application/json",
+    },
+    async () => {
+      const topics = store.listTopics(500);
+      const body = JSON.stringify(
+        {
+          version: "v1",
+          count: topics.length,
+          topics,
+        },
+        null,
+        2
+      );
+      return {
+        contents: [
+          {
+            uri: "deluge://topics/v1",
             mimeType: "application/json",
             text: body,
           },
@@ -239,7 +308,12 @@ async function main(): Promise<void> {
   process.stdin.resume();
   // Keep process alive for stdio clients; handle graceful shutdown on signals.
   const keepAlive = setInterval(() => {}, 1 << 30);
+  let shuttingDown = false;
   const shutdown = async () => {
+    if (shuttingDown) {
+      return;
+    }
+    shuttingDown = true;
     clearInterval(keepAlive);
     await transport.close();
     process.exit(0);

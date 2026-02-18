@@ -16,6 +16,12 @@ Run via stdio transport:
 npm run smoke:matrix:stdio
 ```
 
+Run retrieval-focused scenario:
+
+```bash
+npm run smoke:retrieval
+```
+
 Run a custom scenario file:
 
 ```bash

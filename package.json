@@ -17,6 +17,7 @@
     "smoke": "npm run build && node scripts/smoke-inmemory.mjs",
     "smoke:stdio": "npm run build && node scripts/smoke-stdio.mjs",
     "smoke:matrix": "npm run build && node scripts/smoke-matrix.mjs",
+    "smoke:retrieval": "npm run build && node scripts/smoke-matrix.mjs --scenario scripts/scenarios/retrieval-quality.json",
     "smoke:matrix:stdio": "npm run build && node scripts/smoke-matrix.mjs --transport stdio",
     "diagnose:stdio": "npm run build && node scripts/diagnose-stdio.mjs",
     "test:local": "npm run smoke:stdio",

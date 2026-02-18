@@ -48,9 +48,13 @@ export function sanitizeSectionsStrict(sections: ParsedSection[]): {
       const normalizedCode = normalizeCode(block.code);
       const functionName = extractFunctionName(section.title, normalizedCode);
       const topic = inferTopic(section.sourceUrl, section.title, functionName);
+      const normalizedTopic = normalizeTopic(topic);
+      const functionAliases = buildFunctionAliases(functionName);
+      const serviceScope = inferServiceScope(section.sourceUrl, section.title);
+      const codeFingerprint = hash(normalizedCode);
       const sourceTitle = section.title;
 
-      const dedupeKey = makeDedupeKey(section.sourceUrl, functionName, normalizedCode);
+      const dedupeKey = makeDedupeKey(codeFingerprint);
       if (dedupe.has(dedupeKey)) {
         summary.rejected.duplicate += 1;
         continue;
@@ -58,18 +62,30 @@ export function sanitizeSectionsStrict(sections: ParsedSection[]): {
       dedupe.add(dedupeKey);
 
       const qualityScore = scoreSnippet(section.title, block.language, normalizedCode);
+      const qualityFlags = ["allowlisted_source", "deluge_like", "deduped_unique"];
+      if (qualityScore < 0.7) {
+        qualityFlags.push("low_confidence");
+      }
+
       const id = hash(`${section.sourceUrl}|${section.title}|${normalizedCode}`);
       snippets.push({
         id,
+        snippetId: id,
         topic,
+        normalizedTopic,
         functionName,
+        functionAliases,
+        serviceScope,
         title: section.title,
         sourceUrl: section.sourceUrl,
         sourceTitle,
         code: normalizedCode,
+        codeFingerprint,
         explanation: toShortExplanation(section.rawBody),
         qualityScore,
         flags: qualityScore < 0.7 ? ["low-confidence"] : [],
+        qualityFlags,
+        sourceAllowlisted: true,
         ingestedAt: new Date().toISOString(),
       });
     }
@@ -165,6 +181,75 @@ function inferTopic(sourceUrl: string, title: string, functionName: string): str
   return title.toLowerCase().replace(/\s+/g, "-").slice(0, 60);
 }
 
+function normalizeTopic(topic: string): string {
+  return topic
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9:_-]+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function buildFunctionAliases(functionName: string): string[] {
+  const canonical = functionName.trim();
+  const cleaned = canonical.replace(/\(\)$/, "");
+  const lower = cleaned.toLowerCase();
+  const aliases = new Set<string>([canonical, cleaned, lower, lower.replace(/_/g, ""), lower.replace(/_/g, "-")]);
+  return [...aliases].filter(Boolean);
+}
+
+function inferServiceScope(sourceUrl: string, title: string): string {
+  const known = new Set([
+    "creator",
+    "crm",
+    "books",
+    "billing",
+    "invoice",
+    "inventory",
+    "bookings",
+    "projects",
+    "recruit",
+    "desk",
+    "mail",
+    "connect",
+    "writer",
+    "sign",
+    "fsm",
+    "sdp",
+    "cliq",
+    "people",
+    "calendar",
+    "directory",
+    "one",
+    "workdrive",
+    "sheet",
+    "salesforce",
+    "bugtracker",
+    "notebook",
+  ]);
+
+  try {
+    const url = new URL(sourceUrl);
+    const parts = url.pathname.split("/").filter(Boolean);
+    const helpIndex = parts.indexOf("help");
+    const next = helpIndex !== -1 ? parts[helpIndex + 1] : "";
+    if (next && known.has(next)) {
+      return next;
+    }
+    if (next === "functions" || next === "datatypes") {
+      return "core";
+    }
+  } catch {
+    // no-op
+  }
+
+  const titleMatch = title.toLowerCase().match(/zoho\s+([a-z]+)/);
+  if (titleMatch && known.has(titleMatch[1])) {
+    return titleMatch[1];
+  }
+
+  return "core";
+}
+
 function scoreSnippet(title: string, language: string, code: string): number {
   let score = 0.5;
   if (language === "deluge") {
@@ -190,8 +275,8 @@ function toShortExplanation(rawBody: string): string {
   return normalized.slice(0, 280);
 }
 
-function makeDedupeKey(sourceUrl: string, functionName: string, code: string): string {
-  return hash(`${sourceUrl}|${functionName}|${code}`);
+function makeDedupeKey(codeFingerprint: string): string {
+  return codeFingerprint;
 }
 
 function hash(input: string): string {

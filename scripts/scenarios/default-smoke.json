@@ -1,7 +1,7 @@
 {
   "name": "default-smoke",
   "requiredTools": ["deluge_health", "deluge_validate", "deluge_fix", "deluge_explain", "deluge_examples"],
-  "requiredResources": ["deluge://rules/v1", "deluge://cheatsheet/beginner"],
+  "requiredResources": ["deluge://rules/v1", "deluge://cheatsheet/beginner", "deluge://topics/v1"],
   "steps": [
     {
       "name": "health",
@@ -46,11 +46,13 @@
       "tool": "deluge_examples",
       "args": {
         "topic": "get",
-        "difficulty": "beginner"
+        "query": "map get",
+        "max_results": 3,
+        "require_source_allowlist": true
       },
       "assert": {
         "isError": false,
-        "textIncludes": ["title", "source"]
+        "textIncludes": ["title", "source", "score", "match_reasons", "snippet_id"]
       }
     },
     {
@@ -67,6 +69,14 @@
       "uri": "deluge://cheatsheet/beginner",
       "assert": {
         "resourceTextIncludes": ["Deluge Beginner Cheatsheet", "map", "if"]
+      }
+    },
+    {
+      "name": "topics-resource",
+      "type": "resource",
+      "uri": "deluge://topics/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"version\": \"v1\"", "\"topics\""]
       }
     }
   ]

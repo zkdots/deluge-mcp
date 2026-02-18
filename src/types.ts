@@ -12,15 +12,22 @@ export interface ParsedSection {
 
 export interface ProcessedSnippet {
   id: string;
+  snippetId?: string;
   topic: string;
+  normalizedTopic?: string;
   functionName: string;
+  functionAliases?: string[];
+  serviceScope?: string;
   title: string;
   sourceUrl: string;
   sourceTitle: string;
   code: string;
+  codeFingerprint?: string;
   explanation: string;
   qualityScore: number;
   flags: string[];
+  qualityFlags?: string[];
+  sourceAllowlisted?: boolean;
   ingestedAt: string;
 }
 
@@ -56,4 +63,29 @@ export interface FixChange {
   before: string;
   after: string;
   reason: string;
+}
+
+export interface ExampleSearchInput {
+  topic?: string;
+  query?: string;
+  maxResults?: number;
+  serviceScope?: string;
+  requireSourceAllowlist?: boolean;
+  includeMatchDebug?: boolean;
+}
+
+export interface ExampleSearchMatch {
+  snippet: ProcessedSnippet;
+  score: number;
+  matchReasons: string[];
+  sourceConfidence: "high" | "medium";
+  dedupeGroup?: string;
+  debug?: Record<string, unknown>;
+}
+
+export interface TopicIndexItem {
+  normalizedTopic: string;
+  functionName: string;
+  serviceScope: string;
+  count: number;
 }

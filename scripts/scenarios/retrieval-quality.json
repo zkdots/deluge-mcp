@@ -1,0 +1,56 @@
+{
+  "name": "retrieval-quality",
+  "requiredTools": ["deluge_examples", "deluge_health"],
+  "requiredResources": ["deluge://topics/v1"],
+  "steps": [
+    {
+      "name": "health-verbose-index",
+      "type": "tool",
+      "tool": "deluge_health",
+      "args": { "verbose": true },
+      "assert": {
+        "isError": false,
+        "structuredHasKeys": ["knowledge", "top_topics"],
+        "textIncludes": ["\"topic_count\"", "\"index_version\""]
+      }
+    },
+    {
+      "name": "examples-ranked-get",
+      "type": "tool",
+      "tool": "deluge_examples",
+      "args": {
+        "topic": "get",
+        "query": "map get",
+        "max_results": 5,
+        "require_source_allowlist": true
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"score\"", "\"match_reasons\"", "\"source_confidence\""]
+      }
+    },
+    {
+      "name": "examples-scope-crm",
+      "type": "tool",
+      "tool": "deluge_examples",
+      "args": {
+        "query": "upsert lead",
+        "service_scope": "crm",
+        "max_results": 3,
+        "require_source_allowlist": true
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"service_scope\": \"crm\""]
+      }
+    },
+    {
+      "name": "topics-available",
+      "type": "resource",
+      "uri": "deluge://topics/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"version\": \"v1\"", "\"count\""]
+      }
+    }
+  ]
+}
