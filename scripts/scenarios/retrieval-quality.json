@@ -1,7 +1,7 @@
 {
   "name": "retrieval-quality",
   "requiredTools": ["deluge_examples", "deluge_health"],
-  "requiredResources": ["deluge://topics/v1"],
+  "requiredResources": ["deluge://topics/v1", "deluge://canonical-index/v1", "deluge://coverage/v1"],
   "steps": [
     {
       "name": "health-verbose-index",
@@ -45,11 +45,43 @@
       }
     },
     {
+      "name": "examples-canonical-tier-filter",
+      "type": "tool",
+      "tool": "deluge_examples",
+      "args": {
+        "canonical_key": "datetime.addhour",
+        "tier": "A",
+        "max_results": 3,
+        "include_variants": true,
+        "require_source_allowlist": true
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"canonical_key\"", "\"tier\": \"A\"", "\"variant_count\""]
+      }
+    },
+    {
       "name": "topics-available",
       "type": "resource",
       "uri": "deluge://topics/v1",
       "assert": {
         "resourceTextIncludes": ["\"version\": \"v1\"", "\"count\""]
+      }
+    },
+    {
+      "name": "coverage-available",
+      "type": "resource",
+      "uri": "deluge://coverage/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"coverage\"", "\"completionRatio\""]
+      }
+    },
+    {
+      "name": "canonical-index-available",
+      "type": "resource",
+      "uri": "deluge://canonical-index/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"canonical_index\"", "\"variantCount\""]
       }
     }
   ]

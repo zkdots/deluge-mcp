@@ -1,7 +1,13 @@
 {
   "name": "default-smoke",
   "requiredTools": ["deluge_health", "deluge_validate", "deluge_fix", "deluge_explain", "deluge_examples"],
-  "requiredResources": ["deluge://rules/v1", "deluge://cheatsheet/beginner", "deluge://topics/v1"],
+  "requiredResources": [
+    "deluge://rules/v1",
+    "deluge://cheatsheet/beginner",
+    "deluge://topics/v1",
+    "deluge://canonical-index/v1",
+    "deluge://coverage/v1"
+  ],
   "steps": [
     {
       "name": "health",
@@ -52,7 +58,7 @@
       },
       "assert": {
         "isError": false,
-        "textIncludes": ["title", "source", "score", "match_reasons", "snippet_id"]
+        "textIncludes": ["title", "source", "score", "match_reasons", "snippet_id", "canonical_key", "tier"]
       }
     },
     {
@@ -77,6 +83,22 @@
       "uri": "deluge://topics/v1",
       "assert": {
         "resourceTextIncludes": ["\"version\": \"v1\"", "\"topics\""]
+      }
+    },
+    {
+      "name": "canonical-index-resource",
+      "type": "resource",
+      "uri": "deluge://canonical-index/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"canonical_index\"", "\"variantCount\""]
+      }
+    },
+    {
+      "name": "coverage-resource",
+      "type": "resource",
+      "uri": "deluge://coverage/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"coverage\"", "\"summary\""]
       }
     }
   ]

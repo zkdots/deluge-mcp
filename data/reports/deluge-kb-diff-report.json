@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-02-20T21:11:48.333Z",
+  "schemaVersion": "deluge-kb-diff/v1",
+  "counts": {
+    "oldCanonicalSnippets": 262,
+    "newCanonicalSnippets": 262,
+    "deltaCanonicalSnippets": 0,
+    "oldRawUnits": 739,
+    "newRawUnits": 739,
+    "deltaRawUnits": 0
+  },
+  "changes": {
+    "addedKeys": [],
+    "removedKeys": [],
+    "changedScopes": [],
+    "changedTiers": [],
+    "changedSources": [],
+    "tierAChanges": []
+  },
+  "requiresManualReview": false,
+  "reviewReason": "No Tier A curation changes detected."
+}

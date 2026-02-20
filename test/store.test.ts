@@ -146,6 +146,15 @@ test("searchExamples ranks by topic/query and respects allowlist + scope filters
     });
     assert.ok(crmMatches.length >= 1);
     assert.equal(crmMatches[0].snippet.id, "crm-upsert");
+
+    const canonicalMatches = store.searchExamples({
+      canonicalKey: "map.get",
+      tier: "A",
+      maxResults: 3,
+      requireSourceAllowlist: true,
+    });
+    assert.ok(canonicalMatches.length >= 1);
+    assert.equal(canonicalMatches[0].snippet.id, "map-get");
   } finally {
     await cleanup();
   }

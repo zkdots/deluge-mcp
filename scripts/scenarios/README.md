@@ -22,6 +22,14 @@ Run retrieval-focused scenario:
 npm run smoke:retrieval
 ```
 
+This scenario validates Deluge ranking plus canonical key/tier filters and `deluge://coverage` + `deluge://canonical-index` resources.
+
+Run Zoho curation/retrieval scenario:
+
+```bash
+npm run smoke:zoho-retrieval
+```
+
 Run a custom scenario file:
 
 ```bash
