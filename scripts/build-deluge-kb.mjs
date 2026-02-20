@@ -8,64 +8,19 @@ const DEFAULT_INPUT = "data/processed/snippets.json";
 const DEFAULT_OUTPUT = "data/processed/snippets.json";
 const SCHEMA_VERSION = "deluge-kb/v1";
 
-const REQUIRED_CANONICAL_KEYS = [
-  "collection.clear",
-  "collection.isempty",
-  "collection.size",
-  "collection.values",
-  "common.todate",
-  "common.tonumber",
-  "common.tostring",
-  "datetime.addday",
-  "datetime.addhour",
-  "datetime.addminutes",
-  "datetime.weekday",
-  "general.createrecord",
-  "general.getrecord",
-  "general.getrecordbyid",
-  "general.getrecords",
-  "general.searchrecords",
-  "list.get",
-  "map.get",
-  "map.keys",
-  "map.put",
-  "number.floor",
-  "number.max",
-  "number.min",
-  "string.len",
-  "string.replacefirst",
-  "string.substring",
-];
-
-const TIER_A_KEYS = new Set([
-  "map.get",
-  "map.put",
-  "list.get",
-  "string.substring",
-  "string.len",
-  "common.tonumber",
-  "common.todate",
-  "common.tostring",
-  "datetime.addday",
-  "datetime.addhour",
-  "general.createrecord",
-  "general.getrecord",
-  "general.getrecordbyid",
-  "general.getrecords",
-  "general.searchrecords",
-]);
-
 const SOURCE_ALLOWLIST_HOST = "www.zoho.com";
 const SOURCE_ALLOWLIST_PATH_PREFIX = "/deluge/help/";
 
 async function main() {
   const inputPath = process.argv[2] ?? DEFAULT_INPUT;
   const outputPath = process.argv[3] ?? DEFAULT_OUTPUT;
+  const config = await loadDelugeKbConfig();
+  const tierAKeys = new Set(config.tierAKeys);
 
   const rawPayload = JSON.parse(await fs.readFile(inputPath, "utf8"));
   const incoming = Array.isArray(rawPayload.snippets) ? rawPayload.snippets : [];
 
-  const { snippets, canonicalIndex, summary, coverage } = buildKnowledgePack(incoming);
+  const { snippets, canonicalIndex, summary, coverage } = buildKnowledgePack(incoming, config, tierAKeys);
   if (rawPayload.schemaVersion === SCHEMA_VERSION && rawPayload.summary) {
     summary.inputSections = Math.max(summary.inputSections, toFiniteNumber(rawPayload.summary.inputSections, 0));
     summary.rawUnits = Math.max(summary.rawUnits, toFiniteNumber(rawPayload.summary.rawUnits, 0));
@@ -107,7 +62,7 @@ async function main() {
   }
 }
 
-function buildKnowledgePack(inputSnippets) {
+function buildKnowledgePack(inputSnippets, config, tierAKeys) {
   const summary = {
     inputSections: inputSnippets.length,
     rawUnits: 0,
@@ -173,6 +128,7 @@ function buildKnowledgePack(inputSnippets) {
       title: snippet.title,
       code: snippet.code,
       sourceAllowlisted: snippet.sourceAllowlisted,
+      tierAKeys,
     });
 
     candidates.push({
@@ -196,16 +152,19 @@ function buildKnowledgePack(inputSnippets) {
   summary.mergedVariants = variantsMerged;
 
   const presentCanonicalKeys = [...new Set(snippets.map((snippet) => snippet.canonicalKey))].sort();
-  const missingCanonicalKeys = REQUIRED_CANONICAL_KEYS.filter((key) => !presentCanonicalKeys.includes(key));
+  const missingCanonicalKeys = config.requiredCanonicalKeys.filter((key) => !presentCanonicalKeys.includes(key));
   const completionRatio =
-    REQUIRED_CANONICAL_KEYS.length === 0
+    config.requiredCanonicalKeys.length === 0
       ? 1
       : Number(
-          ((REQUIRED_CANONICAL_KEYS.length - missingCanonicalKeys.length) / REQUIRED_CANONICAL_KEYS.length).toFixed(4)
+          (
+            (config.requiredCanonicalKeys.length - missingCanonicalKeys.length) /
+            config.requiredCanonicalKeys.length
+          ).toFixed(4)
         );
 
   const coverage = {
-    requiredCanonicalKeys: REQUIRED_CANONICAL_KEYS,
+    requiredCanonicalKeys: config.requiredCanonicalKeys,
     presentCanonicalKeys,
     missingCanonicalKeys,
     completionRatio,
@@ -475,12 +434,12 @@ function inferConfidence(snippet, sampleVsReference) {
   return clamp(Number(score.toFixed(4)), 0, 1);
 }
 
-function inferTier({ canonicalKey, confidence, title, code, sourceAllowlisted }) {
+function inferTier({ canonicalKey, confidence, title, code, sourceAllowlisted, tierAKeys }) {
   const risky = /\b(error|throws|invalid operation|out of bounds)\b/i.test(`${title}\n${code}`);
   if (risky) {
     return "C";
   }
-  if (sourceAllowlisted && !risky && confidence >= 0.88 && TIER_A_KEYS.has(canonicalKey)) {
+  if (sourceAllowlisted && !risky && confidence >= 0.88 && tierAKeys.has(canonicalKey)) {
     return "A";
   }
   if (sourceAllowlisted && confidence >= 0.75) {
@@ -625,6 +584,15 @@ function toFiniteNumber(value, fallback) {
 
 function hash(input) {
   return createHash("sha256").update(input).digest("hex").slice(0, 16);
+}
+
+async function loadDelugeKbConfig() {
+  const configUrl = new URL("../config/deluge-kb.json", import.meta.url);
+  const payload = JSON.parse(await fs.readFile(configUrl, "utf8"));
+  return {
+    requiredCanonicalKeys: normalizeStringArray(payload.requiredCanonicalKeys),
+    tierAKeys: normalizeStringArray(payload.tierAKeys),
+  };
 }
 
 main().catch((error) => {

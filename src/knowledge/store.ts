@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { ExampleSearchInput, ExampleSearchMatch, ProcessedSnippet, TopicIndexItem } from "../types.js";
+import { overlapScore, tokenize } from "./search-utils.js";
 
 interface SnippetFile {
   generatedAt?: string;
@@ -15,6 +17,8 @@ interface SnippetFile {
 const INDEX_VERSION = "v1";
 const SOURCE_ALLOWLIST_HOST = "www.zoho.com";
 const SOURCE_ALLOWLIST_PATH_PREFIX = "/deluge/help/";
+const DELUGE_KB_CONFIG = loadDelugeKbConfig();
+const DELUGE_TIER_A_KEYS = new Set(DELUGE_KB_CONFIG.tierAKeys);
 
 export interface KnowledgeCoverage {
   requiredCanonicalKeys: string[];
@@ -151,7 +155,7 @@ export class KnowledgeStore {
     const maxResults = clamp(input.maxResults ?? 5, 1, 20);
     const topicNeedle = normalizeTopic(input.topic ?? "");
     const queryText = (input.query ?? "").trim().toLowerCase();
-    const queryTokens = tokenize(queryText);
+    const queryTokens = tokenize(queryText, 3);
     const requestedScope = (input.serviceScope ?? "").trim().toLowerCase();
     const canonicalNeedle = normalizeCanonicalKey(input.canonicalKey ?? "");
     const requestedTier = (input.tier ?? "").trim().toUpperCase();
@@ -194,7 +198,7 @@ export class KnowledgeStore {
   }
 
   findRelatedByCode(code: string, limit = 3): ProcessedSnippet[] {
-    const tokens = tokenize(code);
+    const tokens = tokenize(code, 3);
     if (tokens.length === 0) {
       return [];
     }
@@ -203,7 +207,7 @@ export class KnowledgeStore {
       .filter((snippet) => snippet.qualityScore >= 0.7)
       .map((snippet) => ({
         snippet,
-        score: overlapScore(tokens, tokenize(`${snippet.code} ${snippet.title} ${snippet.canonicalKey ?? ""}`)),
+        score: overlapScore(tokens, tokenize(`${snippet.code} ${snippet.title} ${snippet.canonicalKey ?? ""}`, 3)),
       }))
       .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score || b.snippet.qualityScore - a.snippet.qualityScore)
@@ -258,7 +262,7 @@ export class KnowledgeStore {
       this.coverage.presentCanonicalKeys.length > 0 ||
       this.coverage.missingCanonicalKeys.length > 0;
     if (!hasCoverageFromPayload) {
-      this.coverage = buildCoverage(this.dedupedSnippets, []);
+      this.coverage = buildCoverage(this.dedupedSnippets, DELUGE_KB_CONFIG.requiredCanonicalKeys);
     }
 
     if (this.summary.rawUnits === 0) {
@@ -338,7 +342,8 @@ function rankSnippet(
 
   if (queryTokens.length > 0) {
     const searchable = tokenize(
-      `${snippet.code} ${snippet.title} ${snippet.topic} ${snippet.functionName} ${snippet.serviceScope ?? ""} ${canonicalKey}`
+      `${snippet.code} ${snippet.title} ${snippet.topic} ${snippet.functionName} ${snippet.serviceScope ?? ""} ${canonicalKey}`,
+      3
     );
     const overlap = overlapScore(queryTokens, searchable);
     if (overlap > 0) {
@@ -438,12 +443,13 @@ function hydrateSnippet(raw: ProcessedSnippet): ProcessedSnippet {
   const requiresScopes = normalizeStringList(raw.requiresScopes);
   const requiresModule = normalizeRequiresModule(raw.requiresModule);
   const sampleVsReference = normalizeSampleType(raw.sampleVsReference, title, normalizedCode);
-  const confidence = clampNumber(
+  const confidence = clamp(
     Number.isFinite(raw.confidence) ? Number(raw.confidence) : Number(raw.qualityScore ?? 0.6),
     0,
-    1
+    1,
+    4
   );
-  const qualityScore = clampNumber(Number.isFinite(raw.qualityScore) ? Number(raw.qualityScore) : confidence, 0, 1);
+  const qualityScore = clamp(Number.isFinite(raw.qualityScore) ? Number(raw.qualityScore) : confidence, 0, 1, 4);
   const tier = normalizeTier(raw.tier, confidence, title, normalizedCode, sourceAllowlisted, canonicalKey);
   const flags = Array.isArray(raw.flags) ? raw.flags : [];
   const qualityFlags = mergeQualityFlags(raw.qualityFlags, flags, sourceAllowlisted, qualityScore);
@@ -507,7 +513,7 @@ function normalizeCoverage(raw: Partial<KnowledgeCoverage> | undefined): Knowled
     requiredCanonicalKeys: normalizeStringList(raw?.requiredCanonicalKeys),
     presentCanonicalKeys: normalizeStringList(raw?.presentCanonicalKeys),
     missingCanonicalKeys: normalizeStringList(raw?.missingCanonicalKeys),
-    completionRatio: clampNumber(Number(raw?.completionRatio ?? 0), 0, 1),
+    completionRatio: clamp(Number(raw?.completionRatio ?? 0), 0, 1, 4),
     tierCounts: normalizeCountMap(raw?.tierCounts),
   };
 }
@@ -596,7 +602,7 @@ function buildCoverage(snippets: ProcessedSnippet[], requiredCanonicalKeys: stri
   const completionRatio =
     requiredCanonicalKeys.length === 0
       ? 1
-      : clampNumber((requiredCanonicalKeys.length - missingCanonicalKeys.length) / requiredCanonicalKeys.length, 0, 1);
+      : clamp((requiredCanonicalKeys.length - missingCanonicalKeys.length) / requiredCanonicalKeys.length, 0, 1, 4);
 
   return {
     requiredCanonicalKeys,
@@ -648,7 +654,7 @@ function normalizeVariants(rawVariants: ProcessedSnippet["variants"]): NonNullab
     }
 
     const sampleVsReference = variant.sampleVsReference === "reference" ? "reference" : "sample";
-    const confidence = clampNumber(Number(variant.confidence ?? 0.6), 0, 1);
+    const confidence = clamp(Number(variant.confidence ?? 0.6), 0, 1, 4);
     const tier = variant.tier === "A" || variant.tier === "B" || variant.tier === "C" ? variant.tier : "C";
 
     normalized.push({
@@ -702,28 +708,11 @@ function normalizeTier(
   }
 
   const risky = /\b(error|throws|invalid operation|out of bounds)\b/i.test(`${title}\n${code}`);
-  const tierASet = new Set([
-    "map.get",
-    "map.put",
-    "list.get",
-    "string.substring",
-    "string.len",
-    "common.tonumber",
-    "common.todate",
-    "common.tostring",
-    "datetime.addday",
-    "datetime.addhour",
-    "general.createrecord",
-    "general.getrecord",
-    "general.getrecordbyid",
-    "general.getrecords",
-    "general.searchrecords",
-  ]);
 
   if (risky) {
     return "C";
   }
-  if (sourceAllowlisted && !risky && confidence >= 0.88 && tierASet.has(canonicalKey)) {
+  if (sourceAllowlisted && !risky && confidence >= 0.88 && DELUGE_TIER_A_KEYS.has(canonicalKey)) {
     return "A";
   }
   if (sourceAllowlisted && confidence >= 0.75) {
@@ -841,24 +830,6 @@ function shouldReplace(previous: ProcessedSnippet, incoming: ProcessedSnippet): 
   return incoming.id.localeCompare(previous.id) < 0;
 }
 
-function tokenize(value: string): string[] {
-  return value
-    .toLowerCase()
-    .split(/[^a-z0-9_]+/)
-    .filter((token) => token.length > 2);
-}
-
-function overlapScore(input: string[], target: string[]): number {
-  const targetSet = new Set(target);
-  let score = 0;
-  for (const token of input) {
-    if (targetSet.has(token)) {
-      score += 1;
-    }
-  }
-  return score;
-}
-
 function buildFunctionAliases(functionName: string): string[] {
   const cleaned = functionName.trim().replace(/\(\)$/, "");
   const lower = cleaned.toLowerCase();
@@ -950,15 +921,15 @@ function isAllowedSource(source: string): boolean {
   }
 }
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function clampNumber(value: number, min: number, max: number): number {
+function clamp(value: number, min: number, max: number, precision?: number): number {
   if (!Number.isFinite(value)) {
     return min;
   }
-  return Math.max(min, Math.min(max, Number(value.toFixed(4))));
+  const clamped = Math.max(min, Math.min(max, value));
+  if (typeof precision === "number") {
+    return Number(clamped.toFixed(precision));
+  }
+  return clamped;
 }
 
 function toFiniteNumber(value: unknown, fallback: number): number {
@@ -979,4 +950,23 @@ function countBy<T>(items: T[], getKey: (item: T) => string): Record<string, num
 
 function hash(input: string): string {
   return createHash("sha256").update(input).digest("hex").slice(0, 16);
+}
+
+function loadDelugeKbConfig(): { requiredCanonicalKeys: string[]; tierAKeys: string[] } {
+  try {
+    const configUrl = new URL("../../../config/deluge-kb.json", import.meta.url);
+    const payload = JSON.parse(readFileSync(configUrl, "utf8")) as {
+      requiredCanonicalKeys?: string[];
+      tierAKeys?: string[];
+    };
+    return {
+      requiredCanonicalKeys: normalizeStringList(payload.requiredCanonicalKeys),
+      tierAKeys: normalizeStringList(payload.tierAKeys),
+    };
+  } catch {
+    return {
+      requiredCanonicalKeys: [],
+      tierAKeys: [],
+    };
+  }
 }

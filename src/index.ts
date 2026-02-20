@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { overlapScore, tokenize } from "./knowledge/search-utils.js";
 import { KnowledgeStore } from "./knowledge/store.js";
 import { getBeginnerCheatsheet } from "./resources/cheatsheet.js";
 import { getRulesResource } from "./resources/rules.js";
@@ -888,7 +889,7 @@ function searchZohoCrmJsSnippets(
 ): Array<{ snippet: ZohoCrmJsSnippet; score: number }> {
   const topicNeedle = (input.topic ?? "").trim().toLowerCase();
   const query = (input.query ?? "").trim().toLowerCase();
-  const queryTokens = tokenize(query);
+  const queryTokens = tokenize(query, 2);
   const tagNeedle = (input.tag ?? "").trim().toLowerCase();
   const canonicalKeyNeedle = (input.canonicalKey ?? "").trim().toLowerCase();
   const requestedTier = (input.tier ?? "").trim().toUpperCase();
@@ -924,7 +925,7 @@ function searchZohoCrmJsSnippets(
         if (title.includes(query) || snippet.code.toLowerCase().includes(query)) {
           score += 2;
         }
-        score += overlapScore(queryTokens, textTokens) * 1.25;
+        score += overlapScore(queryTokens, textTokens, "ratio") * 1.25;
       }
 
       if (!topicNeedle && !query && !tagNeedle) {
@@ -955,31 +956,6 @@ function countByTier(snippets: ZohoCrmJsSnippet[]): Record<string, number> {
     counts[tier] = (counts[tier] ?? 0) + 1;
   }
   return counts;
-}
-
-function tokenize(input: string): string[] {
-  const normalized = input
-    .toLowerCase()
-    .replace(/[^a-z0-9_]+/g, " ")
-    .trim();
-  if (!normalized) {
-    return [];
-  }
-  return normalized.split(/\s+/).filter((token) => token.length > 1);
-}
-
-function overlapScore(source: string[], target: string[]): number {
-  if (source.length === 0 || target.length === 0) {
-    return 0;
-  }
-  const targetSet = new Set(target);
-  let hits = 0;
-  for (const token of source) {
-    if (targetSet.has(token)) {
-      hits += 1;
-    }
-  }
-  return hits / source.length;
 }
 
 async function main(): Promise<void> {
