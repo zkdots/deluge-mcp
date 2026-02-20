@@ -1,0 +1,2347 @@
+{
+  "generatedAt": "2026-02-20T21:11:52.677Z",
+  "schemaVersion": "zoho-crm-js-sdk-kb/v1",
+  "libraryId": "/zoho/zohocrm-javascript-sdk-8.0",
+  "sourceAllowlist": [
+    {
+      "host": "github.com",
+      "pathIncludes": "/zoho/zohocrm-javascript-sdk-8.0/"
+    }
+  ],
+  "summary": {
+    "inputSections": 33,
+    "rawUnits": 104,
+    "keptSnippets": 25,
+    "mergedVariants": 79,
+    "rejected": {
+      "sourceNotAllowed": 0,
+      "noCode": 0,
+      "nonCodeLanguage": 0,
+      "noisy": 0,
+      "duplicate": 11
+    }
+  },
+  "coverage": {
+    "requiredCanonicalKeys": [
+      "auth.client-registration",
+      "auth.oauth",
+      "auth.redirect-handling",
+      "auth.scopes",
+      "files.download",
+      "pipeline.transfer",
+      "platform.zet",
+      "records.count",
+      "records.create",
+      "records.delete",
+      "records.mass-update",
+      "records.read",
+      "records.update",
+      "runtime.response-handling",
+      "sdk.configuration",
+      "sdk.distribution",
+      "sdk.environment",
+      "sdk.initialization",
+      "tags.responses"
+    ],
+    "presentCanonicalKeys": [
+      "auth.client-registration",
+      "auth.oauth",
+      "auth.redirect-handling",
+      "auth.scopes",
+      "files.download",
+      "pipeline.transfer",
+      "platform.zet",
+      "records.count",
+      "records.create",
+      "records.delete",
+      "records.mass-update",
+      "records.read",
+      "records.update",
+      "runtime.response-handling",
+      "runtime.response-models",
+      "sdk.configuration",
+      "sdk.distribution",
+      "sdk.environment",
+      "sdk.feature-index",
+      "sdk.initialization",
+      "tags.responses"
+    ],
+    "missingCanonicalKeys": [],
+    "completionRatio": 1,
+    "tierCounts": {
+      "A": 4,
+      "B": 10,
+      "C": 11
+    }
+  },
+  "canonicalIndex": [
+    {
+      "groupKey": "auth.client-registration|2.0.0",
+      "canonicalKey": "auth.client-registration",
+      "apiFamily": "auth",
+      "operation": "client-registration",
+      "version": "2.0.0",
+      "primarySnippetId": "67b621a060464c76",
+      "snippetIds": [
+        "67b621a060464c76",
+        "0619cccd5892e24b",
+        "17c77670ebe00e9f",
+        "26e6194a196feace",
+        "2e3e7c036e8c2833",
+        "412ba16367e4a691",
+        "73ae70fec616077d",
+        "767cc9af20c1c946",
+        "972b55ccdc59a2c4",
+        "caf44c54b9fb8eeb"
+      ],
+      "variantSnippetIds": [
+        "0619cccd5892e24b",
+        "17c77670ebe00e9f",
+        "26e6194a196feace",
+        "2e3e7c036e8c2833",
+        "412ba16367e4a691",
+        "73ae70fec616077d",
+        "767cc9af20c1c946",
+        "972b55ccdc59a2c4",
+        "caf44c54b9fb8eeb"
+      ],
+      "variantCount": 9,
+      "tierCounts": {
+        "C": 10
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "auth.oauth|2.0.0",
+      "canonicalKey": "auth.oauth",
+      "apiFamily": "auth",
+      "operation": "oauth",
+      "version": "2.0.0",
+      "primarySnippetId": "b3c2886b3b56bb44",
+      "snippetIds": [
+        "b3c2886b3b56bb44",
+        "55efd4267594db72",
+        "a742d612910f00f4"
+      ],
+      "variantSnippetIds": [
+        "55efd4267594db72",
+        "a742d612910f00f4"
+      ],
+      "variantCount": 2,
+      "tierCounts": {
+        "A": 2,
+        "B": 1
+      },
+      "requiresScopes": [
+        "ZohoCRM.modules.ALL",
+        "ZohoCRM.settings.ALL"
+      ],
+      "sampleTypes": [
+        "reference",
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "auth.redirect-handling|1.0.0",
+      "canonicalKey": "auth.redirect-handling",
+      "apiFamily": "auth",
+      "operation": "redirect-handling",
+      "version": "1.0.0",
+      "primarySnippetId": "b922e92fcf61c706",
+      "snippetIds": [
+        "b922e92fcf61c706"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "auth.redirect-handling|2.0.0",
+      "canonicalKey": "auth.redirect-handling",
+      "apiFamily": "auth",
+      "operation": "redirect-handling",
+      "version": "2.0.0",
+      "primarySnippetId": "6f4950266826b7f8",
+      "snippetIds": [
+        "6f4950266826b7f8"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "auth.scopes|main",
+      "canonicalKey": "auth.scopes",
+      "apiFamily": "auth",
+      "operation": "scopes",
+      "version": "main",
+      "primarySnippetId": "f1bcb025d0cb3784",
+      "snippetIds": [
+        "f1bcb025d0cb3784",
+        "0ebdd4911d7e2a64",
+        "0f6adedbed018cdf",
+        "2893284966d4f13d",
+        "61e52dba76ef2fa2",
+        "76fb1e31784e2bde",
+        "8be5977e3a3652b6"
+      ],
+      "variantSnippetIds": [
+        "0ebdd4911d7e2a64",
+        "0f6adedbed018cdf",
+        "2893284966d4f13d",
+        "61e52dba76ef2fa2",
+        "76fb1e31784e2bde",
+        "8be5977e3a3652b6"
+      ],
+      "variantCount": 6,
+      "tierCounts": {
+        "C": 7
+      },
+      "requiresScopes": [
+        "ZohoCRM.mass_convert.leads.CREATE",
+        "ZohoCRM.mass_convert.leads.READ",
+        "ZohoCRM.modules.ALL",
+        "ZohoCRM.settings.fields.ALL",
+        "ZohoCRM.settings.related_lists.ALL"
+      ],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "files.download|1.0.0",
+      "canonicalKey": "files.download",
+      "apiFamily": "files",
+      "operation": "download",
+      "version": "1.0.0",
+      "primarySnippetId": "2e794e82c867885b",
+      "snippetIds": [
+        "2e794e82c867885b",
+        "42c8be83e7c89558",
+        "fb2e6730a5235ced"
+      ],
+      "variantSnippetIds": [
+        "42c8be83e7c89558",
+        "fb2e6730a5235ced"
+      ],
+      "variantCount": 2,
+      "tierCounts": {
+        "C": 3
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "pipeline.transfer|1.0.0",
+      "canonicalKey": "pipeline.transfer",
+      "apiFamily": "pipeline",
+      "operation": "transfer",
+      "version": "1.0.0",
+      "primarySnippetId": "181d53bba3f793d3",
+      "snippetIds": [
+        "181d53bba3f793d3",
+        "4eb55a1a5dd89020",
+        "5277996020f693a5"
+      ],
+      "variantSnippetIds": [
+        "4eb55a1a5dd89020",
+        "5277996020f693a5"
+      ],
+      "variantCount": 2,
+      "tierCounts": {
+        "C": 3
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "platform.zet|2.0.0",
+      "canonicalKey": "platform.zet",
+      "apiFamily": "platform",
+      "operation": "zet",
+      "version": "2.0.0",
+      "primarySnippetId": "041278ba90eda026",
+      "snippetIds": [
+        "041278ba90eda026",
+        "2023c4ef817f7391",
+        "4c35a33cd610329b",
+        "21b1aea32f93b5df",
+        "5522b3d28f342aa2",
+        "1ee55a50eb69c976",
+        "2f4d5b6269ce3c1c",
+        "c4a0da37b3f5f5f5"
+      ],
+      "variantSnippetIds": [
+        "2023c4ef817f7391",
+        "4c35a33cd610329b",
+        "21b1aea32f93b5df",
+        "5522b3d28f342aa2",
+        "1ee55a50eb69c976",
+        "2f4d5b6269ce3c1c",
+        "c4a0da37b3f5f5f5"
+      ],
+      "variantCount": 7,
+      "tierCounts": {
+        "C": 5,
+        "B": 3
+      },
+      "requiresScopes": [
+        "ZohoCRM.settings.ALL",
+        "ZohoCRM.users.ALL"
+      ],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "records.count|1.0.0",
+      "canonicalKey": "records.count",
+      "apiFamily": "records",
+      "operation": "count",
+      "version": "1.0.0",
+      "primarySnippetId": "1c27cbb84908d31e",
+      "snippetIds": [
+        "1c27cbb84908d31e",
+        "5276965aafdb46d3",
+        "74be9af04f0e952d",
+        "e6aa99366179eb74"
+      ],
+      "variantSnippetIds": [
+        "5276965aafdb46d3",
+        "74be9af04f0e952d",
+        "e6aa99366179eb74"
+      ],
+      "variantCount": 3,
+      "tierCounts": {
+        "C": 4
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "records.create|2.0.0",
+      "canonicalKey": "records.create",
+      "apiFamily": "records",
+      "operation": "create",
+      "version": "2.0.0",
+      "primarySnippetId": "f38252ee65e2c4ae",
+      "snippetIds": [
+        "f38252ee65e2c4ae"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "A": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "records.create|main",
+      "canonicalKey": "records.create",
+      "apiFamily": "records",
+      "operation": "create",
+      "version": "main",
+      "primarySnippetId": "96be4b0c20af61d1",
+      "snippetIds": [
+        "96be4b0c20af61d1"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "records.delete|1.0.0",
+      "canonicalKey": "records.delete",
+      "apiFamily": "records",
+      "operation": "delete",
+      "version": "1.0.0",
+      "primarySnippetId": "6d4422efc5aac609",
+      "snippetIds": [
+        "6d4422efc5aac609",
+        "37ccbf6836af98dc"
+      ],
+      "variantSnippetIds": [
+        "37ccbf6836af98dc"
+      ],
+      "variantCount": 1,
+      "tierCounts": {
+        "C": 1,
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference",
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "records.delete|2.0.0",
+      "canonicalKey": "records.delete",
+      "apiFamily": "records",
+      "operation": "delete",
+      "version": "2.0.0",
+      "primarySnippetId": "0ebffe4fc20f2c01",
+      "snippetIds": [
+        "0ebffe4fc20f2c01",
+        "3b2aa028ccefe4d7",
+        "accc9eb99b5b9aee",
+        "e3b7332e5a9028e3",
+        "e7fff05ecb94adc8"
+      ],
+      "variantSnippetIds": [
+        "3b2aa028ccefe4d7",
+        "accc9eb99b5b9aee",
+        "e3b7332e5a9028e3",
+        "e7fff05ecb94adc8"
+      ],
+      "variantCount": 4,
+      "tierCounts": {
+        "C": 5
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "records.mass-update|1.0.0",
+      "canonicalKey": "records.mass-update",
+      "apiFamily": "records",
+      "operation": "mass-update",
+      "version": "1.0.0",
+      "primarySnippetId": "07d8a87347fe5710",
+      "snippetIds": [
+        "07d8a87347fe5710",
+        "095c10513562baef",
+        "09e35765f0342dbc",
+        "0e3a1dc6f5fd8ed3",
+        "273659deb95f5b1b",
+        "547f76fdc00c533c",
+        "82d412ecfdf9c790",
+        "869c3bf74ec59847",
+        "9785f49927be7afa",
+        "cf3c4ed325fc95a3",
+        "f587e5021b4ff8ea",
+        "f693d618b6221a16"
+      ],
+      "variantSnippetIds": [
+        "095c10513562baef",
+        "09e35765f0342dbc",
+        "0e3a1dc6f5fd8ed3",
+        "273659deb95f5b1b",
+        "547f76fdc00c533c",
+        "82d412ecfdf9c790",
+        "869c3bf74ec59847",
+        "9785f49927be7afa",
+        "cf3c4ed325fc95a3",
+        "f587e5021b4ff8ea",
+        "f693d618b6221a16"
+      ],
+      "variantCount": 11,
+      "tierCounts": {
+        "C": 12
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "records.read|1.0.0",
+      "canonicalKey": "records.read",
+      "apiFamily": "records",
+      "operation": "read",
+      "version": "1.0.0",
+      "primarySnippetId": "4ddd13b02bcf748b",
+      "snippetIds": [
+        "4ddd13b02bcf748b",
+        "7b03eab41b78dee9",
+        "5766d6f1ba56bdf6",
+        "d9ad6bfe3b88a49b"
+      ],
+      "variantSnippetIds": [
+        "7b03eab41b78dee9",
+        "5766d6f1ba56bdf6",
+        "d9ad6bfe3b88a49b"
+      ],
+      "variantCount": 3,
+      "tierCounts": {
+        "B": 2,
+        "C": 2
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference",
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "records.update|1.0.0",
+      "canonicalKey": "records.update",
+      "apiFamily": "records",
+      "operation": "update",
+      "version": "1.0.0",
+      "primarySnippetId": "0c7602e721e64d41",
+      "snippetIds": [
+        "0c7602e721e64d41"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "runtime.response-handling|1.0.0",
+      "canonicalKey": "runtime.response-handling",
+      "apiFamily": "runtime",
+      "operation": "response-handling",
+      "version": "1.0.0",
+      "primarySnippetId": "5a520506e9ef6785",
+      "snippetIds": [
+        "5a520506e9ef6785",
+        "9744f1469e018923",
+        "c1840fdeb8e992d4",
+        "ce5fb38641b72af0"
+      ],
+      "variantSnippetIds": [
+        "9744f1469e018923",
+        "c1840fdeb8e992d4",
+        "ce5fb38641b72af0"
+      ],
+      "variantCount": 3,
+      "tierCounts": {
+        "C": 4
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "runtime.response-models|1.0.0",
+      "canonicalKey": "runtime.response-models",
+      "apiFamily": "runtime",
+      "operation": "response-models",
+      "version": "1.0.0",
+      "primarySnippetId": "1d316bef32dc238e",
+      "snippetIds": [
+        "1d316bef32dc238e",
+        "3adef1008d37192c",
+        "56ae3880ced28ef7",
+        "7375d4df00aa6626",
+        "8902e8d29f970397",
+        "cb82b4fd8d75899b",
+        "27631fb2c02465f3",
+        "5464044f4407843f",
+        "6089c076ee1b8dc5",
+        "7daaa1b329933626",
+        "b459a218c3eeb5f0",
+        "e8bf696840d840fa"
+      ],
+      "variantSnippetIds": [
+        "3adef1008d37192c",
+        "56ae3880ced28ef7",
+        "7375d4df00aa6626",
+        "8902e8d29f970397",
+        "cb82b4fd8d75899b",
+        "27631fb2c02465f3",
+        "5464044f4407843f",
+        "6089c076ee1b8dc5",
+        "7daaa1b329933626",
+        "b459a218c3eeb5f0",
+        "e8bf696840d840fa"
+      ],
+      "variantCount": 11,
+      "tierCounts": {
+        "C": 12
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.configuration|2.0.0",
+      "canonicalKey": "sdk.configuration",
+      "apiFamily": "sdk",
+      "operation": "configuration",
+      "version": "2.0.0",
+      "primarySnippetId": "f59ab7fa44215c3c",
+      "snippetIds": [
+        "f59ab7fa44215c3c"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "A": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.distribution|1.0.0",
+      "canonicalKey": "sdk.distribution",
+      "apiFamily": "sdk",
+      "operation": "distribution",
+      "version": "1.0.0",
+      "primarySnippetId": "ed6a8a7365294c6e",
+      "snippetIds": [
+        "ed6a8a7365294c6e"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.distribution|2.0.0",
+      "canonicalKey": "sdk.distribution",
+      "apiFamily": "sdk",
+      "operation": "distribution",
+      "version": "2.0.0",
+      "primarySnippetId": "05ddf5e46bc52134",
+      "snippetIds": [
+        "05ddf5e46bc52134"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.environment|1.0.0",
+      "canonicalKey": "sdk.environment",
+      "apiFamily": "sdk",
+      "operation": "environment",
+      "version": "1.0.0",
+      "primarySnippetId": "da3376c7bbb436e8",
+      "snippetIds": [
+        "da3376c7bbb436e8"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "A": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.feature-index|main",
+      "canonicalKey": "sdk.feature-index",
+      "apiFamily": "sdk",
+      "operation": "feature-index",
+      "version": "main",
+      "primarySnippetId": "5404e9e1b259aa57",
+      "snippetIds": [
+        "5404e9e1b259aa57",
+        "751c998baaafc9e9",
+        "34284210bc9c57f0",
+        "3959656b1c59274a",
+        "3ade39157a45d98b",
+        "4342bb2d76f65fdb",
+        "7edbdad059a93093",
+        "8b49a844bb8ff4ea"
+      ],
+      "variantSnippetIds": [
+        "751c998baaafc9e9",
+        "34284210bc9c57f0",
+        "3959656b1c59274a",
+        "3ade39157a45d98b",
+        "4342bb2d76f65fdb",
+        "7edbdad059a93093",
+        "8b49a844bb8ff4ea"
+      ],
+      "variantCount": 7,
+      "tierCounts": {
+        "C": 8
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    },
+    {
+      "groupKey": "sdk.initialization|2.0.0",
+      "canonicalKey": "sdk.initialization",
+      "apiFamily": "sdk",
+      "operation": "initialization",
+      "version": "2.0.0",
+      "primarySnippetId": "58d4e0856ae5491f",
+      "snippetIds": [
+        "58d4e0856ae5491f"
+      ],
+      "variantSnippetIds": [],
+      "variantCount": 0,
+      "tierCounts": {
+        "B": 1
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "sample"
+      ]
+    },
+    {
+      "groupKey": "tags.responses|1.0.0",
+      "canonicalKey": "tags.responses",
+      "apiFamily": "tags",
+      "operation": "responses",
+      "version": "1.0.0",
+      "primarySnippetId": "0ceed095c3717407",
+      "snippetIds": [
+        "0ceed095c3717407",
+        "0d40a55d38b9ec36",
+        "12519d1253a6daca",
+        "4b0d4a03bb07ab22",
+        "667b097da62b0951",
+        "9d33cd1c57c528f5",
+        "b0cd3435c0e89100",
+        "c7b8c588d91c4427",
+        "ef17d14c7b7e9e41"
+      ],
+      "variantSnippetIds": [
+        "0d40a55d38b9ec36",
+        "12519d1253a6daca",
+        "4b0d4a03bb07ab22",
+        "667b097da62b0951",
+        "9d33cd1c57c528f5",
+        "b0cd3435c0e89100",
+        "c7b8c588d91c4427",
+        "ef17d14c7b7e9e41"
+      ],
+      "variantCount": 8,
+      "tierCounts": {
+        "C": 9
+      },
+      "requiresScopes": [],
+      "sampleTypes": [
+        "reference"
+      ]
+    }
+  ],
+  "snippets": [
+    {
+      "id": "b3c2886b3b56bb44",
+      "snippetId": "b3c2886b3b56bb44",
+      "topic": "auth:oauth",
+      "title": "Zoho CRM JS SDK: Full Initialization With SDKConfig",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Full Initialization With SDKConfig",
+      "language": "javascript",
+      "code": "class SDKInitializer {\n  static async initializeSDK() {\n    let logger = Logger.getInstance(Levels.ALL);\n    let environment = DataCenter.US.PRODUCTION();\n\n    let token = new OAuthBuilder()\n      .clientId(\"clientId\")\n      .scope(\"scope\")\n      .redirectURL(\"redirectURL\")\n      .build();\n\n    let sdkConfig = new SDKConfigBuilder()\n      .autoRefreshFields(true)\n      .pickListValidation(false)\n      .cacheStore(true)\n      .build();\n\n    (await new InitializeBuilder())\n      .environment(environment)\n      .token(token)\n      .SDKConfig(sdkConfig)\n      .logger(logger)\n      .initialize();\n  }\n}",
+      "codeFingerprint": "2fa61aa7e4218a7e",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Initialize the Zoho CRM JavaScript SDK with environment, OAuth token, SDK config, and logger. --------------------------------",
+      "tags": [
+        "family:auth",
+        "lang:javascript",
+        "oauth",
+        "op:oauth",
+        "source:reference"
+      ],
+      "qualityScore": 1,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.666Z",
+      "apiFamily": "auth",
+      "operation": "oauth",
+      "canonicalKey": "auth.oauth",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 1,
+      "tier": "A",
+      "variantCount": 2,
+      "variants": [
+        {
+          "id": "55efd4267594db72",
+          "title": "Zoho CRM JS SDK: OAuth Token Builder",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "javascript",
+          "sampleVsReference": "reference",
+          "confidence": 0.95,
+          "tier": "A"
+        },
+        {
+          "id": "a742d612910f00f4",
+          "title": "Zoho CRM JS SDK: CORS Sample Initialization",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/samples/cors-zcrm-apis/README.md",
+          "language": "javascript",
+          "sampleVsReference": "sample",
+          "confidence": 0.9,
+          "tier": "B"
+        }
+      ]
+    },
+    {
+      "id": "f38252ee65e2c4ae",
+      "snippetId": "f38252ee65e2c4ae",
+      "topic": "records:create",
+      "title": "Zoho CRM JS SDK: Create Records Example",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Create Records Example",
+      "language": "javascript",
+      "code": "let recordOperations = new ZCRM.Record.Operations(\"Leads\");\nlet request = new ZCRM.Record.Model.BodyWrapper();\nlet recordsArray = [];\n\nlet record = new ZCRM.Record.Model.Record();\nrecord.addFieldValue(ZCRM.Record.Model.Field.Leads.LAST_NAME, \"JS SDK\");\nrecord.addFieldValue(ZCRM.Record.Model.Field.Leads.FIRST_NAME, \"JS\");\nrecord.addFieldValue(ZCRM.Record.Model.Field.Leads.COMPANY, \"ZCRM\");\nrecord.addKeyValue(\"Custom_field\", \"Value\");\n\nrecordsArray.push(record);\nrequest.setData(recordsArray);\n\nlet response = await recordOperations.createRecords(request, new HeaderMap());\nif (response != null) {\n  console.log(\"Status Code: \" + response.getStatusCode());\n}",
+      "codeFingerprint": "6f1114b5af8b3837",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Create lead records with standard fields, custom fields, and inspect the API response. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:javascript",
+        "op:create",
+        "source:reference"
+      ],
+      "qualityScore": 1,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.666Z",
+      "apiFamily": "records",
+      "operation": "create",
+      "canonicalKey": "records.create",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": "Leads",
+      "sampleVsReference": "reference",
+      "confidence": 1,
+      "tier": "A",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "96be4b0c20af61d1",
+      "snippetId": "96be4b0c20af61d1",
+      "topic": "records:create",
+      "title": "Zoho CRM JS SDK: Create Lead From Form Data",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/samples/cors-zcrm-apis/index.html",
+      "sourceTitle": "Zoho CRM JS SDK: Create Lead From Form Data",
+      "language": "javascript",
+      "code": "async function createLeadForm() {\n  var formObj = {};\n  var inputs = $(\"#leadForm\").serializeArray();\n\n  $.each(inputs, function (i, input) {\n    formObj[input.name] = input.value;\n  });\n\n  await ZCRMSample.Lead.create(\"Leads\", formObj);\n  viewRecords();\n  return false;\n}",
+      "codeFingerprint": "ea8d92415f6c8202",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/samples/cors-zcrm-apis/index.html Serialize form data and create a lead through a sample helper. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:javascript",
+        "op:create",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.9,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.666Z",
+      "apiFamily": "records",
+      "operation": "create",
+      "canonicalKey": "records.create",
+      "version": "main",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": "Leads",
+      "sampleVsReference": "sample",
+      "confidence": 0.9,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "6d4422efc5aac609",
+      "snippetId": "6d4422efc5aac609",
+      "topic": "records:delete",
+      "title": "Zoho CRM JS SDK: Delete Lead Record (sample)",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html",
+      "sourceTitle": "Zoho CRM JS SDK: Delete Lead Record (sample)",
+      "language": "javascript",
+      "code": "async function deleteR(id) {\n  await ZCRMSample.Lead.delete_0(\"Leads\", id);\n  viewRecords();\n}",
+      "codeFingerprint": "30c5c54db5d21cc5",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html Delete a lead by record id in sample flow. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:javascript",
+        "op:delete",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.9,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "records",
+      "operation": "delete",
+      "canonicalKey": "records.delete",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": "Leads",
+      "sampleVsReference": "sample",
+      "confidence": 0.9,
+      "tier": "B",
+      "variantCount": 1,
+      "variants": [
+        {
+          "id": "37ccbf6836af98dc",
+          "title": "Zoho CRM JS SDK: API Response Object Model - actionwrapper-for-successful-post-put-delete-requests",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "0c7602e721e64d41",
+      "snippetId": "0c7602e721e64d41",
+      "topic": "records:update",
+      "title": "Zoho CRM JS SDK: Update Lead Record",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html",
+      "sourceTitle": "Zoho CRM JS SDK: Update Lead Record",
+      "language": "javascript",
+      "code": "async function edit(id) {\n  var input = { Last_Name: $(\"tr[data-id='\" + id + \"'] td\")[1].innerHTML + \"1\" };\n  await ZCRMSample.Lead.update(\"Leads\", id, input);\n  viewRecords();\n}",
+      "codeFingerprint": "e9d8c8850eaddb04",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html Update a lead by record id through a sample helper. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:javascript",
+        "op:update",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.9,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.670Z",
+      "apiFamily": "records",
+      "operation": "update",
+      "canonicalKey": "records.update",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": "Leads",
+      "sampleVsReference": "sample",
+      "confidence": 0.9,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "4ddd13b02bcf748b",
+      "snippetId": "4ddd13b02bcf748b",
+      "topic": "records:read",
+      "title": "Zoho CRM JS SDK: Fetch and Render Leads",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html",
+      "sourceTitle": "Zoho CRM JS SDK: Fetch and Render Leads",
+      "language": "javascript",
+      "code": "async function createListView() {\n  document.getElementById(\"createView\").style.display = \"none\";\n  document.getElementById(\"listview\").style.display = \"none\";\n\n  var html = \"<table><tr><th></th><th>Name</th><th>Email</th></tr>\";\n  html += await ZCRMSample.Lead.get(\"Leads\");\n  html += \"</table>\";\n\n  document.getElementById(\"listview\").innerHTML = html;\n}",
+      "codeFingerprint": "059936ddb5d23018",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/index.html Fetch leads and render the list view. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:javascript",
+        "op:read",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.85,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.670Z",
+      "apiFamily": "records",
+      "operation": "read",
+      "canonicalKey": "records.read",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": "createView",
+      "sampleVsReference": "sample",
+      "confidence": 0.85,
+      "tier": "B",
+      "variantCount": 3,
+      "variants": [
+        {
+          "id": "7b03eab41b78dee9",
+          "title": "Zoho CRM JS SDK: Invoke API and Check Status Code",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/cors-zcrm-apis/README.md",
+          "language": "javascript",
+          "sampleVsReference": "sample",
+          "confidence": 0.85,
+          "tier": "B"
+        },
+        {
+          "id": "5766d6f1ba56bdf6",
+          "title": "Zoho CRM JS SDK: API Response Object Model - getobject",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "d9ad6bfe3b88a49b",
+          "title": "Zoho CRM JS SDK: API Response Object Model - responsewrapper-for-successful-get-requests",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "f59ab7fa44215c3c",
+      "snippetId": "f59ab7fa44215c3c",
+      "topic": "sdk:configuration",
+      "title": "Zoho CRM JS SDK: SDKConfig With Timeout",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: SDKConfig With Timeout",
+      "language": "javascript",
+      "code": "let sdkConfig = new SDKConfigBuilder()\n  .autoRefreshFields(true)\n  .pickListValidation(false)\n  .cacheStore(true)\n  .timeout(1000)\n  .build();",
+      "codeFingerprint": "59c99ee9f2736444",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Configure auto-refresh, cache, picklist validation, and timeout. --------------------------------",
+      "tags": [
+        "family:sdk",
+        "lang:javascript",
+        "op:configuration",
+        "source:reference"
+      ],
+      "qualityScore": 0.85,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "sdk",
+      "operation": "configuration",
+      "canonicalKey": "sdk.configuration",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.85,
+      "tier": "A",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "05ddf5e46bc52134",
+      "snippetId": "05ddf5e46bc52134",
+      "topic": "sdk:distribution",
+      "title": "Zoho CRM JS SDK: Include SDK via CDN (v2.0.0)",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Include SDK via CDN (v2.0.0)",
+      "language": "javascript",
+      "code": "https://static.zohocdn.com/zohocrm/v8.0/sdk/2.0.0/zohocrmsdk-8-0.js",
+      "codeFingerprint": "14d4e29980bb141f",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md CDN path for loading SDK v2.0.0 in browser apps. --------------------------------",
+      "tags": [
+        "family:sdk",
+        "lang:javascript",
+        "op:distribution",
+        "source:reference"
+      ],
+      "qualityScore": 0.85,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "sdk",
+      "operation": "distribution",
+      "canonicalKey": "sdk.distribution",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.85,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "da3376c7bbb436e8",
+      "snippetId": "da3376c7bbb436e8",
+      "topic": "sdk:environment",
+      "title": "Zoho CRM JS SDK: Configure API Environment",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Configure API Environment",
+      "language": "javascript",
+      "code": "let environment = DataCenter.US.PRODUCTION();",
+      "codeFingerprint": "e3b33f7e5a2e0085",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Select domain/environment for API calls. --------------------------------",
+      "tags": [
+        "family:sdk",
+        "lang:javascript",
+        "op:environment",
+        "source:reference"
+      ],
+      "qualityScore": 0.85,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "sdk",
+      "operation": "environment",
+      "canonicalKey": "sdk.environment",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.85,
+      "tier": "A",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "6f4950266826b7f8",
+      "snippetId": "6f4950266826b7f8",
+      "topic": "auth:redirect-handling",
+      "title": "Zoho CRM JS SDK: Redirect URL Token Handling (v2 sample)",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/samples/cors-zcrm-apis/redirect.html",
+      "sourceTitle": "Zoho CRM JS SDK: Redirect URL Token Handling (v2 sample)",
+      "language": "javascript",
+      "code": "function getPropertiesFromURL() {\n  var props = {};\n  var propertyString = window.location.hash || window.location.search;\n  if (propertyString) {\n    propertyString = typeof propertyString === 'string' && propertyString.slice(1);\n    if (propertyString) {\n      propertyString\n        .split('&')\n        .forEach(function (prop) {\n          var key = prop.split('=')[0],\n            value = prop.split('=')[1];\n          props[key] = value;\n        });\n    }\n  }\n  return props;\n}\n\nfunction setAccessToken() {\n  var hashProps = getPropertiesFromURL();\n  if (hashProps) {\n    for (var key in hashProps) {\n      if (hashProps.hasOwnProperty(key)) {\n        var value = key === 'api_domain' ? decodeURIComponent(hashProps[key]) : hashProps[key];\n        localStorage.setItem(key, value);\n      }\n    }\n  }\n  setTimeout(function () {\n    window.close();\n  }, 0);\n}\n\nsetAccessToken();",
+      "codeFingerprint": "dd8ef57680dc1086",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/samples/cors-zcrm-apis/redirect.html Read redirect hash/search parameters and persist token fields in browser storage. --------------------------------",
+      "tags": [
+        "family:auth",
+        "lang:javascript",
+        "op:redirect-handling",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.8,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "auth",
+      "operation": "redirect-handling",
+      "canonicalKey": "auth.redirect-handling",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "sample",
+      "confidence": 0.8,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "58d4e0856ae5491f",
+      "snippetId": "58d4e0856ae5491f",
+      "topic": "sdk:initialization",
+      "title": "Zoho CRM JS SDK: Initialize Sample App Entry",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/samples/cors-zcrm-apis/index.html",
+      "sourceTitle": "Zoho CRM JS SDK: Initialize Sample App Entry",
+      "language": "javascript",
+      "code": "ZCRMSample.init();",
+      "codeFingerprint": "31f7f6ac8ae57f6d",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/samples/cors-zcrm-apis/index.html Entry call that initializes SDK sample runtime.",
+      "tags": [
+        "family:sdk",
+        "lang:javascript",
+        "op:initialization",
+        "sample",
+        "source:sample"
+      ],
+      "qualityScore": 0.8,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "sdk",
+      "operation": "initialization",
+      "canonicalKey": "sdk.initialization",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "sample",
+      "confidence": 0.8,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "b922e92fcf61c706",
+      "snippetId": "b922e92fcf61c706",
+      "topic": "auth:redirect-handling",
+      "title": "Zoho CRM JS SDK: Redirect URL Token Handling (LocalStorage)",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/create_records_sample/redirect.html",
+      "sourceTitle": "Zoho CRM JS SDK: Redirect URL Token Handling (LocalStorage)",
+      "language": "javascript",
+      "code": "function getPropertiesFromURL() {\n  var props = {};\n  var propertyString = window.location.hash || window.location.search;\n  if (propertyString) {\n    propertyString = typeof propertyString === \"string\" && propertyString.slice(1);\n    if (propertyString) {\n      propertyString.split(\"&\").forEach(function (prop) {\n        var key = prop.split(\"=\")[0],\n          value = prop.split(\"=\")[1];\n        props[key] = value;\n      });\n    }\n  }\n  return props;\n}\n\nfunction setAccessToken() {\n  var hashProps = getPropertiesFromURL();\n  if (hashProps) {\n    for (var key in hashProps) {\n      if (hashProps.hasOwnProperty(key)) {\n        var value = key === \"api_domain\" ? decodeURIComponent(hashProps[key]) : hashProps[key];\n        localStorage.setItem(key, value);\n      }\n    }\n  }\n  setTimeout(function () {\n    window.close();\n  }, 0);\n}\n\nsetAccessToken();",
+      "codeFingerprint": "a9b81148bb670208",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/samples/create_records_sample/redirect.html Handle redirect parameters and persist token fields in browser local storage. --------------------------------",
+      "tags": [
+        "family:auth",
+        "lang:javascript",
+        "op:redirect-handling",
+        "source:sample"
+      ],
+      "qualityScore": 0.75,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "auth",
+      "operation": "redirect-handling",
+      "canonicalKey": "auth.redirect-handling",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "sample",
+      "confidence": 0.75,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    },
+    {
+      "id": "67b621a060464c76",
+      "snippetId": "67b621a060464c76",
+      "topic": "auth:client-registration",
+      "title": "Zoho CRM JS SDK: API Console Client Registration Steps - click-create",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: API Console Client Registration Steps",
+      "language": "apidoc",
+      "code": "5. Click 'CREATE'.",
+      "codeFingerprint": "2f16b8f2b529a065",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Checklist for registering OAuth client in API console. --------------------------------",
+      "tags": [
+        "family:auth",
+        "lang:apidoc",
+        "op:client-registration",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "auth",
+      "operation": "client-registration",
+      "canonicalKey": "auth.client-registration",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 9,
+      "variants": [
+        {
+          "id": "0619cccd5892e24b",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - client-name",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "17c77670ebe00e9f",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - authorized-redirect-uris",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "26e6194a196feace",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - choose-client-type-as-client-based-applications",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "2e3e7c036e8c2833",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - click-add-client",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "412ba16367e4a691",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - visit-https-api-console-zoho-com",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "73ae70fec616077d",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - homepage-url",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "767cc9af20c1c946",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - javascript-domain",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "972b55ccdc59a2c4",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - enter",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "caf44c54b9fb8eeb",
+          "title": "Zoho CRM JS SDK: API Console Client Registration Steps - register-zoho-client",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "f1bcb025d0cb3784",
+      "snippetId": "f1bcb025d0cb3784",
+      "topic": "auth:scopes",
+      "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - required-scopes-zohocrm-settings-fields-all-zohocrm-mass-convert-leads-create-zo",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area",
+      "language": "apidoc",
+      "code": "- Required Scopes: ZohoCRM.settings.fields.ALL, ZohoCRM.mass_convert.leads.CREATE, ZohoCRM.mass_convert.leads.READ\n\nNote: Access and refresh tokens are environment-specific and domain-specific.",
+      "codeFingerprint": "3c19cba9f236d1bc",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md Scope matrix and environment notes for avoiding OAUTH-SCOPE-MISMATCH. --------------------------------",
+      "tags": [
+        "family:auth",
+        "lang:apidoc",
+        "oauth",
+        "op:scopes",
+        "scopes",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "auth",
+      "operation": "scopes",
+      "canonicalKey": "auth.scopes",
+      "version": "main",
+      "stability": "stable",
+      "requiresScopes": [
+        "ZohoCRM.mass_convert.leads.CREATE",
+        "ZohoCRM.mass_convert.leads.READ",
+        "ZohoCRM.modules.ALL",
+        "ZohoCRM.settings.fields.ALL",
+        "ZohoCRM.settings.related_lists.ALL"
+      ],
+      "requiresModule": "Leads",
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 6,
+      "variants": [
+        {
+          "id": "0ebdd4911d7e2a64",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - required-scopes-zohocrm-modules-all-zohocrm-settings-fields-all-zohocrm-settings",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "0f6adedbed018cdf",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - mass-convert-api",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "2893284966d4f13d",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - related-records-api",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "61e52dba76ef2fa2",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - required-scopes-zohocrm-modules-all-zohocrm-settings-fields-all",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "76fb1e31784e2bde",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - deal-contact-roles-api-records-api",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "8be5977e3a3652b6",
+          "title": "Zoho CRM JS SDK: OAuth Scope Requirements by API Area - zoho-crm-api-scope-requirements",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "2e794e82c867885b",
+      "snippetId": "2e794e82c867885b",
+      "topic": "files:download",
+      "title": "Zoho CRM JS SDK: Download/File Response Structure - download-api-response-structure",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Download/File Response Structure",
+      "language": "apidoc",
+      "code": "Download API Response Structure:",
+      "codeFingerprint": "70dcc8cc85dca7d5",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Download response model for file operations. --------------------------------",
+      "tags": [
+        "family:files",
+        "lang:apidoc",
+        "op:download",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "files",
+      "operation": "download",
+      "canonicalKey": "files.download",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 2,
+      "variants": [
+        {
+          "id": "42c8be83e7c89558",
+          "title": "Zoho CRM JS SDK: Download/File Response Structure - downloadhandler",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "fb2e6730a5235ced",
+          "title": "Zoho CRM JS SDK: Common API Response Handler Structure - responsehandler",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "181d53bba3f793d3",
+      "snippetId": "181d53bba3f793d3",
+      "topic": "pipeline:transfer",
+      "title": "Zoho CRM JS SDK: Transfer Pipeline Response Structure - transferpipelineactionhandler",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Transfer Pipeline Response Structure",
+      "language": "apidoc",
+      "code": "TransferPipelineActionHandler:\n    TransferPipelineActionWrapper\n    APIException",
+      "codeFingerprint": "b3855b3bd20635f5",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Response hierarchy for transfer pipeline operations. --------------------------------",
+      "tags": [
+        "family:pipeline",
+        "lang:apidoc",
+        "op:transfer",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "pipeline",
+      "operation": "transfer",
+      "canonicalKey": "pipeline.transfer",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 2,
+      "variants": [
+        {
+          "id": "4eb55a1a5dd89020",
+          "title": "Zoho CRM JS SDK: Transfer Pipeline Response Structure - transferpipelineactionresponse",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "5277996020f693a5",
+          "title": "Zoho CRM JS SDK: Transfer Pipeline Response Structure - pipeline-api-transfer-pipeline-response-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "1c27cbb84908d31e",
+      "snippetId": "1c27cbb84908d31e",
+      "topic": "records:count",
+      "title": "Zoho CRM JS SDK: Record API Count Response Structure - record-api-count-response-structure",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Record API Count Response Structure",
+      "language": "apidoc",
+      "code": "Record API Count Response Structure:",
+      "codeFingerprint": "247b1e80c93f95c1",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Response type map for record count retrieval. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:apidoc",
+        "op:count",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "records",
+      "operation": "count",
+      "canonicalKey": "records.count",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 3,
+      "variants": [
+        {
+          "id": "5276965aafdb46d3",
+          "title": "Zoho CRM JS SDK: Record API Count Response Structure - counthandler",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "74be9af04f0e952d",
+          "title": "Zoho CRM JS SDK: Record API Count Response Structure - holds-a-long-count",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "e6aa99366179eb74",
+          "title": "Zoho CRM JS SDK: Record API Count Response Structure - countwrapper",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "0ebffe4fc20f2c01",
+      "snippetId": "0ebffe4fc20f2c01",
+      "topic": "records:delete",
+      "title": "Zoho CRM JS SDK: Deleted Records Response Structure - deletedrecordshandler",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Deleted Records Response Structure",
+      "language": "apidoc",
+      "code": "DeletedRecordsHandler:",
+      "codeFingerprint": "05c3359fcd39ca9e",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Response schema for deleted records retrieval. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:apidoc",
+        "op:delete",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "records",
+      "operation": "delete",
+      "canonicalKey": "records.delete",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 4,
+      "variants": [
+        {
+          "id": "3b2aa028ccefe4d7",
+          "title": "Zoho CRM JS SDK: Deleted Records Response Structure - record-api-deleted-records-response-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "accc9eb99b5b9aee",
+          "title": "Zoho CRM JS SDK: Deleted Records Response Structure - holds-deletedrecord-list",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "e3b7332e5a9028e3",
+          "title": "Zoho CRM JS SDK: Deleted Records Response Structure - holds-info-object",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "e7fff05ecb94adc8",
+          "title": "Zoho CRM JS SDK: Deleted Records Response Structure - deletedrecordswrapper",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "07d8a87347fe5710",
+      "snippetId": "07d8a87347fe5710",
+      "topic": "records:mass-update",
+      "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - massupdateactionwrapper-class",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure",
+      "language": "apidoc",
+      "code": "- MassUpdateActionWrapper class",
+      "codeFingerprint": "a790613ac09d942d",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Action-level response hierarchy for record mass update execution. --------------------------------",
+      "tags": [
+        "family:records",
+        "lang:apidoc",
+        "op:mass-update",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "records",
+      "operation": "mass-update",
+      "canonicalKey": "records.mass-update",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 11,
+      "variants": [
+        {
+          "id": "095c10513562baef",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - holds-list-of-massupdateactionresponse-instances",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "09e35765f0342dbc",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - massupdateactionhandler-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "0e3a1dc6f5fd8ed3",
+          "title": "Zoho CRM JS SDK: Mass Update Response Structure - massupdateresponsehandler",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "273659deb95f5b1b",
+          "title": "Zoho CRM JS SDK: Mass Update Response Structure - massupdateresponse-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "547f76fdc00c533c",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - record-api-mass-update-response-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "82d412ecfdf9c790",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - apiexception-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "869c3bf74ec59847",
+          "title": "Zoho CRM JS SDK: Mass Update Response Structure - mass-update-api-response-structures",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "9785f49927be7afa",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - massupdateactionresponse-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "cf3c4ed325fc95a3",
+          "title": "Zoho CRM JS SDK: Record API Mass Update Action Response Structure - massupdatesuccessresponse-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "f587e5021b4ff8ea",
+          "title": "Zoho CRM JS SDK: Mass Update Response Structure - massupdateresponsewrapper",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "f693d618b6221a16",
+          "title": "Zoho CRM JS SDK: Mass Update Response Structure - holds-a-list-of-massupdateresponse-interfaces",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "5a520506e9ef6785",
+      "snippetId": "5a520506e9ef6785",
+      "topic": "runtime:response-handling",
+      "title": "Zoho CRM JS SDK: API Response Object Model - apiexception-for-failed-api-calls",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: API Response Object Model",
+      "language": "apidoc",
+      "code": "- APIException for failed API calls",
+      "codeFingerprint": "e4e4e3fc3e318035",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Summary of response wrappers and exception classes used by SDK operations. --------------------------------",
+      "tags": [
+        "family:runtime",
+        "lang:apidoc",
+        "op:response-handling",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.670Z",
+      "apiFamily": "runtime",
+      "operation": "response-handling",
+      "canonicalKey": "runtime.response-handling",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 3,
+      "variants": [
+        {
+          "id": "9744f1469e018923",
+          "title": "Zoho CRM JS SDK: API Response Object Model - apiresponse",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "c1840fdeb8e992d4",
+          "title": "Zoho CRM JS SDK: API Response Object Model - sdkexception",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "ce5fb38641b72af0",
+          "title": "Zoho CRM JS SDK: API Response Object Model - thrown-for-sdk-anomalies-and-unexpected-behavior",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "1d316bef32dc238e",
+      "snippetId": "1d316bef32dc238e",
+      "topic": "runtime:response-models",
+      "title": "Zoho CRM JS SDK: Particular API Action Structure - contains-properties-with-actionresponse-interface-entries",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Particular API Action Structure",
+      "language": "apidoc",
+      "code": "- Contains properties with ActionResponse interface entries",
+      "codeFingerprint": "9a0e4693f3a2e529",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md ActionHandler/ActionWrapper/ActionResponse hierarchy used by particular APIs. --------------------------------",
+      "tags": [
+        "family:runtime",
+        "lang:apidoc",
+        "op:response-models",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "runtime",
+      "operation": "response-models",
+      "canonicalKey": "runtime.response-models",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 11,
+      "variants": [
+        {
+          "id": "3adef1008d37192c",
+          "title": "Zoho CRM JS SDK: Common API Response Handler Structure - common-api-response-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "56ae3880ced28ef7",
+          "title": "Zoho CRM JS SDK: Common API Action Structure - contains-properties-with-actionresponse-class-entries",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "7375d4df00aa6626",
+          "title": "Zoho CRM JS SDK: Common API Action Structure - actionresponse-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "8902e8d29f970397",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - successresponse-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "cb82b4fd8d75899b",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - actionresponse-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "27631fb2c02465f3",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - actionwrapper-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "5464044f4407843f",
+          "title": "Zoho CRM JS SDK: Common API Action Structure - common-api-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "6089c076ee1b8dc5",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - actionhandler-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "7daaa1b329933626",
+          "title": "Zoho CRM JS SDK: Common API Action Structure - actionhandler-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "b459a218c3eeb5f0",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - particular-api-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "e8bf696840d840fa",
+          "title": "Zoho CRM JS SDK: Particular API Action Structure - actionwrapper-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "5404e9e1b259aa57",
+      "snippetId": "5404e9e1b259aa57",
+      "topic": "sdk:feature-index",
+      "title": "Zoho CRM JS SDK: v8 Feature List - get-related-records-count-of-a-record-support-added",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: v8 Feature List",
+      "language": "apidoc",
+      "code": "- Get Related Records Count of a Record: Support added.",
+      "codeFingerprint": "238931d84b31c7b3",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md High-level list of recently added/improved API capabilities in SDK v8.0. --------------------------------",
+      "tags": [
+        "family:sdk",
+        "lang:apidoc",
+        "op:feature-index",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.671Z",
+      "apiFamily": "sdk",
+      "operation": "feature-index",
+      "canonicalKey": "sdk.feature-index",
+      "version": "main",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 7,
+      "variants": [
+        {
+          "id": "751c998baaafc9e9",
+          "title": "Zoho CRM JS SDK: v8 Feature List - get-rich-text-fields-api-support-added",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "34284210bc9c57f0",
+          "title": "Zoho CRM JS SDK: v8 Feature List - data-sharing-rules-api-support-added",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "3959656b1c59274a",
+          "title": "Zoho CRM JS SDK: v8 Feature List - history-tracking-fields-api-new-fields-added",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "3ade39157a45d98b",
+          "title": "Zoho CRM JS SDK: v8 Feature List - overview",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "4342bb2d76f65fdb",
+          "title": "Zoho CRM JS SDK: v8 Feature List - calls-preference-support-added",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "7edbdad059a93093",
+          "title": "Zoho CRM JS SDK: v8 Feature List - record-level-sharing-of-emails-support-added",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "8b49a844bb8ff4ea",
+          "title": "Zoho CRM JS SDK: v8 Feature List - inventory-mass-conversion-status-api-issue-fixed",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "0ceed095c3717407",
+      "snippetId": "0ceed095c3717407",
+      "topic": "tags:responses",
+      "title": "Zoho CRM JS SDK: Tags API Response Structure - recordactionwrapper-class",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Tags API Response Structure",
+      "language": "apidoc",
+      "code": "- RecordActionWrapper class",
+      "codeFingerprint": "283cecdea15b5ab3",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Response model hierarchy specific to Tags API record actions. --------------------------------",
+      "tags": [
+        "family:tags",
+        "lang:apidoc",
+        "op:responses",
+        "responses",
+        "source:reference"
+      ],
+      "qualityScore": 0.65,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "tags",
+      "operation": "responses",
+      "canonicalKey": "tags.responses",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.65,
+      "tier": "C",
+      "variantCount": 8,
+      "variants": [
+        {
+          "id": "0d40a55d38b9ec36",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - string-successcount",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "12519d1253a6daca",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - recordsuccessresponse-class",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "4b0d4a03bb07ab22",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - boolean-lockedcount",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "667b097da62b0951",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - recordactionhandler-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "9d33cd1c57c528f5",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - boolean-wfscheduler",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "b0cd3435c0e89100",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - tags-api-response-structure",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "c7b8c588d91c4427",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - recordactionresponse-interface",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "ef17d14c7b7e9e41",
+          "title": "Zoho CRM JS SDK: Tags API Response Structure - holds-list-of-recordactionresponse-instances",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "041278ba90eda026",
+      "snippetId": "041278ba90eda026",
+      "topic": "platform:zet",
+      "title": "Zoho CRM JS SDK: ZET CLI Commands",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: ZET CLI Commands",
+      "language": "bash",
+      "code": "zet pack",
+      "codeFingerprint": "f91c4cd6629f6375",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md Core ZET commands for init/package/run during extension development. --------------------------------",
+      "tags": [
+        "family:platform",
+        "lang:bash",
+        "op:zet",
+        "source:reference"
+      ],
+      "qualityScore": 0.6,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.672Z",
+      "apiFamily": "platform",
+      "operation": "zet",
+      "canonicalKey": "platform.zet",
+      "version": "2.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.6,
+      "tier": "B",
+      "variantCount": 7,
+      "variants": [
+        {
+          "id": "2023c4ef817f7391",
+          "title": "Zoho CRM JS SDK: ZET CLI Commands",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "bash",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "B"
+        },
+        {
+          "id": "4c35a33cd610329b",
+          "title": "Zoho CRM JS SDK: ZET CLI Commands",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "bash",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "B"
+        },
+        {
+          "id": "21b1aea32f93b5df",
+          "title": "Zoho CRM JS SDK: ZET Project Manifest Configuration - update-the-client-id-in-plugin-manifest-json-with-your-registered-zoho-client-id",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "5522b3d28f342aa2",
+          "title": "Zoho CRM JS SDK: ZET Project Manifest Configuration - after-zet-init-a-project-folder-is-created",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.65,
+          "tier": "C"
+        },
+        {
+          "id": "1ee55a50eb69c976",
+          "title": "Zoho CRM JS SDK: ZET Project Manifest Configuration - inside-the-project-folder-locate-plugin-manifest-json",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "2f4d5b6269ce3c1c",
+          "title": "Zoho CRM JS SDK: ZET Project Manifest Configuration - zet-project-configuration",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        },
+        {
+          "id": "c4a0da37b3f5f5f5",
+          "title": "Zoho CRM JS SDK: ZET Project Manifest Configuration - add-required-oauth-scopes-to-be-used-by-the-web-app-within-the-same-file",
+          "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/2.0.0/README.md",
+          "language": "apidoc",
+          "sampleVsReference": "reference",
+          "confidence": 0.6,
+          "tier": "C"
+        }
+      ]
+    },
+    {
+      "id": "ed6a8a7365294c6e",
+      "snippetId": "ed6a8a7365294c6e",
+      "topic": "sdk:distribution",
+      "title": "Zoho CRM JS SDK: Include SDK via CDN (v1.0.0)",
+      "sourceUrl": "https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md",
+      "sourceTitle": "Zoho CRM JS SDK: Include SDK via CDN (v1.0.0)",
+      "language": "html",
+      "code": "<script src=\"https://static.zohocdn.com/zohocrm/v8.0/sdk/1.0.0/zohocrmsdk-8-0.js\"></script>",
+      "codeFingerprint": "e4da41ba3cf0edc8",
+      "summary": "Source: https://github.com/zoho/zohocrm-javascript-sdk-8.0/blob/main/versions/1.0.0/README.md Include the SDK directly in browser pages. --------------------------------",
+      "tags": [
+        "family:sdk",
+        "lang:html",
+        "op:distribution",
+        "source:reference"
+      ],
+      "qualityScore": 0.6,
+      "sourceAllowlisted": true,
+      "ingestedAt": "2026-02-20T21:11:52.670Z",
+      "apiFamily": "sdk",
+      "operation": "distribution",
+      "canonicalKey": "sdk.distribution",
+      "version": "1.0.0",
+      "stability": "stable",
+      "requiresScopes": [],
+      "requiresModule": null,
+      "sampleVsReference": "reference",
+      "confidence": 0.6,
+      "tier": "B",
+      "variantCount": 0,
+      "variants": []
+    }
+  ]
+}

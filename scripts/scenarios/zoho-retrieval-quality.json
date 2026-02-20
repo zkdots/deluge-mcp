@@ -1,0 +1,66 @@
+{
+  "name": "zoho-retrieval-quality",
+  "requiredTools": ["zoho_crm_js_examples", "deluge_health"],
+  "requiredResources": [
+    "zoho://crm-js-sdk/snippets/v1",
+    "zoho://crm-js-sdk/topics/v1",
+    "zoho://crm-js-sdk/canonical-index/v1",
+    "zoho://crm-js-sdk/coverage/v1"
+  ],
+  "steps": [
+    {
+      "name": "health-contains-zoho-curation",
+      "type": "tool",
+      "tool": "deluge_health",
+      "args": { "verbose": true },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"zoho_crm_js_sdk\"", "\"coverage_completion_ratio\"", "\"missing_required_keys\""]
+      }
+    },
+    {
+      "name": "zoho-tier-a-oauth",
+      "type": "tool",
+      "tool": "zoho_crm_js_examples",
+      "args": {
+        "query": "oauth builder initialize",
+        "tier": "A",
+        "max_results": 3
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"canonical_key\"", "\"tier\": \"A\"", "\"requires_scopes\""]
+      }
+    },
+    {
+      "name": "zoho-canonical-delete",
+      "type": "tool",
+      "tool": "zoho_crm_js_examples",
+      "args": {
+        "canonical_key": "records.delete",
+        "tier": "B",
+        "max_results": 2
+      },
+      "assert": {
+        "isError": false,
+        "textIncludes": ["\"canonical_key\": \"records.delete\"", "\"sample_vs_reference\""]
+      }
+    },
+    {
+      "name": "coverage-resource-complete",
+      "type": "resource",
+      "uri": "zoho://crm-js-sdk/coverage/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"missingCanonicalKeys\": []", "\"completionRatio\""]
+      }
+    },
+    {
+      "name": "canonical-index-resource",
+      "type": "resource",
+      "uri": "zoho://crm-js-sdk/canonical-index/v1",
+      "assert": {
+        "resourceTextIncludes": ["\"canonical_index\"", "\"variantCount\""]
+      }
+    }
+  ]
+}
