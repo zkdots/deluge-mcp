@@ -42,6 +42,12 @@ async function main() {
 
   const rules = await client.readResource({ uri: "deluge://rules/v1" });
   const topics = await client.readResource({ uri: "deluge://topics/v1" });
+  const delugeCanonical = await client.readResource({ uri: "deluge://canonical-index/v1" });
+  const delugeCoverage = await client.readResource({ uri: "deluge://coverage/v1" });
+  const zohoSnippets = await client.readResource({ uri: "zoho://crm-js-sdk/snippets/v1" });
+  const zohoTopics = await client.readResource({ uri: "zoho://crm-js-sdk/topics/v1" });
+  const zohoCanonical = await client.readResource({ uri: "zoho://crm-js-sdk/canonical-index/v1" });
+  const zohoCoverage = await client.readResource({ uri: "zoho://crm-js-sdk/coverage/v1" });
 
   console.log("Smoke OK");
   console.log("Tools:", names.join(", "));
@@ -51,6 +57,21 @@ async function main() {
   console.log("Examples content type:", examplesResult.content?.[0]?.type ?? "none");
   console.log("Resource count:", Array.isArray(rules.contents) ? rules.contents.length : 0);
   console.log("Topics resource count:", Array.isArray(topics.contents) ? topics.contents.length : 0);
+  console.log(
+    "Deluge canonical resource count:",
+    Array.isArray(delugeCanonical.contents) ? delugeCanonical.contents.length : 0
+  );
+  console.log(
+    "Deluge coverage resource count:",
+    Array.isArray(delugeCoverage.contents) ? delugeCoverage.contents.length : 0
+  );
+  console.log("Zoho snippets resource count:", Array.isArray(zohoSnippets.contents) ? zohoSnippets.contents.length : 0);
+  console.log("Zoho topics resource count:", Array.isArray(zohoTopics.contents) ? zohoTopics.contents.length : 0);
+  console.log(
+    "Zoho canonical resource count:",
+    Array.isArray(zohoCanonical.contents) ? zohoCanonical.contents.length : 0
+  );
+  console.log("Zoho coverage resource count:", Array.isArray(zohoCoverage.contents) ? zohoCoverage.contents.length : 0);
 
   await client.close();
   await server.close();

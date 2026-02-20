@@ -14,6 +14,26 @@ export interface ProcessedSnippet {
   id: string;
   snippetId?: string;
   topic: string;
+  canonicalKey?: string;
+  apiFamily?: string;
+  operation?: string;
+  version?: string;
+  stability?: "stable" | "beta" | "unknown";
+  requiresScopes?: string[];
+  requiresModule?: string | null;
+  sampleVsReference?: "sample" | "reference";
+  confidence?: number;
+  tier?: "A" | "B" | "C";
+  variantCount?: number;
+  variants?: Array<{
+    id: string;
+    title: string;
+    sourceUrl: string;
+    language?: string;
+    sampleVsReference?: "sample" | "reference";
+    confidence?: number;
+    tier?: "A" | "B" | "C";
+  }>;
   normalizedTopic?: string;
   functionName: string;
   functionAliases?: string[];
@@ -70,6 +90,9 @@ export interface ExampleSearchInput {
   query?: string;
   maxResults?: number;
   serviceScope?: string;
+  canonicalKey?: string;
+  tier?: "A" | "B" | "C";
+  includeVariants?: boolean;
   requireSourceAllowlist?: boolean;
   includeMatchDebug?: boolean;
 }

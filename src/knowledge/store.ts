@@ -1,15 +1,70 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { ExampleSearchInput, ExampleSearchMatch, ProcessedSnippet, TopicIndexItem } from "../types.js";
+import { overlapScore, tokenize } from "./search-utils.js";
 
 interface SnippetFile {
-  snippets: ProcessedSnippet[];
+  generatedAt?: string;
+  schemaVersion?: string;
+  summary?: Partial<KnowledgeSummary>;
+  coverage?: Partial<KnowledgeCoverage>;
+  canonicalIndex?: Array<Partial<KnowledgeCanonicalIndexItem>>;
+  snippets?: ProcessedSnippet[];
 }
 
 const INDEX_VERSION = "v1";
 const SOURCE_ALLOWLIST_HOST = "www.zoho.com";
 const SOURCE_ALLOWLIST_PATH_PREFIX = "/deluge/help/";
+const DELUGE_KB_CONFIG = loadDelugeKbConfig();
+const DELUGE_TIER_A_KEYS = new Set(DELUGE_KB_CONFIG.tierAKeys);
+
+export interface KnowledgeCoverage {
+  requiredCanonicalKeys: string[];
+  presentCanonicalKeys: string[];
+  missingCanonicalKeys: string[];
+  completionRatio: number;
+  tierCounts: Record<string, number>;
+}
+
+export interface KnowledgeSummary {
+  inputSections: number;
+  rawUnits: number;
+  keptSnippets: number;
+  mergedVariants: number;
+  rejected: {
+    sourceNotAllowed: number;
+    noCode: number;
+    notDelugeLike: number;
+    noisy: number;
+    duplicate: number;
+  };
+}
+
+export interface KnowledgeCanonicalIndexItem {
+  groupKey: string;
+  canonicalKey: string;
+  apiFamily: string;
+  operation: string;
+  version: string;
+  primarySnippetId: string;
+  snippetIds: string[];
+  variantSnippetIds: string[];
+  variantCount: number;
+  tierCounts: Record<string, number>;
+  serviceScopes: string[];
+  requiresScopes: string[];
+  sampleTypes: string[];
+}
+
+export interface KnowledgeCurationMetadata {
+  schemaVersion: string;
+  generatedAt: string;
+  summary: KnowledgeSummary;
+  coverage: KnowledgeCoverage;
+  canonicalIndex: KnowledgeCanonicalIndexItem[];
+}
 
 export interface KnowledgeStats {
   index_version: string;
@@ -27,6 +82,11 @@ export class KnowledgeStore {
   private topicIndex: TopicIndexItem[] = [];
   private sourceFile = "data/processed/snippets.json";
   private indexedAt = "";
+  private schemaVersion = "unknown";
+  private generatedAt = "";
+  private summary: KnowledgeSummary = defaultSummary();
+  private coverage: KnowledgeCoverage = defaultCoverage();
+  private canonicalIndex: KnowledgeCanonicalIndexItem[] = [];
 
   async load(filePath = "data/processed/snippets.json"): Promise<void> {
     this.sourceFile = filePath;
@@ -35,8 +95,18 @@ export class KnowledgeStore {
       const payload = JSON.parse(await fs.readFile(absolute, "utf8")) as SnippetFile;
       const incoming = Array.isArray(payload.snippets) ? payload.snippets : [];
       this.snippets = incoming.map((snippet) => hydrateSnippet(snippet));
+      this.schemaVersion = typeof payload.schemaVersion === "string" ? payload.schemaVersion : "unknown";
+      this.generatedAt = typeof payload.generatedAt === "string" ? payload.generatedAt : "";
+      this.summary = normalizeSummary(payload.summary, this.snippets.length);
+      this.coverage = normalizeCoverage(payload.coverage);
+      this.canonicalIndex = normalizeCanonicalIndex(payload.canonicalIndex);
     } catch {
       this.snippets = [];
+      this.schemaVersion = "unknown";
+      this.generatedAt = "";
+      this.summary = defaultSummary();
+      this.coverage = defaultCoverage();
+      this.canonicalIndex = [];
     }
     this.rebuildIndexes();
   }
@@ -61,6 +131,21 @@ export class KnowledgeStore {
     };
   }
 
+  getCurationMetadata(): KnowledgeCurationMetadata {
+    return {
+      schemaVersion: this.schemaVersion,
+      generatedAt: this.generatedAt,
+      summary: this.summary,
+      coverage: this.coverage,
+      canonicalIndex: this.canonicalIndex,
+    };
+  }
+
+  listCanonicalIndex(limit = 500): KnowledgeCanonicalIndexItem[] {
+    const normalizedLimit = clamp(limit, 1, 2000);
+    return this.canonicalIndex.slice(0, normalizedLimit);
+  }
+
   listTopics(limit = 200): TopicIndexItem[] {
     const normalizedLimit = clamp(limit, 1, 1000);
     return this.topicIndex.slice(0, normalizedLimit);
@@ -70,20 +155,30 @@ export class KnowledgeStore {
     const maxResults = clamp(input.maxResults ?? 5, 1, 20);
     const topicNeedle = normalizeTopic(input.topic ?? "");
     const queryText = (input.query ?? "").trim().toLowerCase();
-    const queryTokens = tokenize(queryText);
+    const queryTokens = tokenize(queryText, 3);
     const requestedScope = (input.serviceScope ?? "").trim().toLowerCase();
+    const canonicalNeedle = normalizeCanonicalKey(input.canonicalKey ?? "");
+    const requestedTier = (input.tier ?? "").trim().toUpperCase();
     const requireAllowlist = input.requireSourceAllowlist ?? true;
     const includeDebug = input.includeMatchDebug ?? false;
+    const includeVariants = input.includeVariants ?? false;
 
     const candidates = this.dedupedSnippets
       .filter((snippet) => snippet.qualityScore >= 0.7)
       .filter((snippet) => !requireAllowlist || snippet.sourceAllowlisted === true)
       .filter(
         (snippet) => requestedScope.length === 0 || (snippet.serviceScope ?? "core").toLowerCase() === requestedScope
-      );
+      )
+      .filter(
+        (snippet) =>
+          canonicalNeedle.length === 0 || normalizeCanonicalKey(snippet.canonicalKey ?? "").includes(canonicalNeedle)
+      )
+      .filter((snippet) => requestedTier.length === 0 || (snippet.tier ?? "").toUpperCase() === requestedTier);
 
-    const ranked = candidates
-      .map((snippet) => rankSnippet(snippet, topicNeedle, queryText, queryTokens, requestedScope, includeDebug))
+    return candidates
+      .map((snippet) =>
+        rankSnippet(snippet, topicNeedle, queryText, queryTokens, requestedScope, includeDebug, includeVariants)
+      )
       .filter((match): match is ExampleSearchMatch => match !== null)
       .sort(
         (a, b) =>
@@ -92,8 +187,6 @@ export class KnowledgeStore {
           a.snippet.id.localeCompare(b.snippet.id)
       )
       .slice(0, maxResults);
-
-    return ranked;
   }
 
   findByTopic(topic: string, limit = 5): ProcessedSnippet[] {
@@ -105,7 +198,7 @@ export class KnowledgeStore {
   }
 
   findRelatedByCode(code: string, limit = 3): ProcessedSnippet[] {
-    const tokens = tokenize(code);
+    const tokens = tokenize(code, 3);
     if (tokens.length === 0) {
       return [];
     }
@@ -114,7 +207,7 @@ export class KnowledgeStore {
       .filter((snippet) => snippet.qualityScore >= 0.7)
       .map((snippet) => ({
         snippet,
-        score: overlapScore(tokens, tokenize(`${snippet.code} ${snippet.title}`)),
+        score: overlapScore(tokens, tokenize(`${snippet.code} ${snippet.title} ${snippet.canonicalKey ?? ""}`, 3)),
       }))
       .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score || b.snippet.qualityScore - a.snippet.qualityScore)
@@ -159,6 +252,32 @@ export class KnowledgeStore {
     this.topicIndex = [...grouped.values()].sort(
       (a, b) => b.count - a.count || a.normalizedTopic.localeCompare(b.normalizedTopic)
     );
+
+    if (this.canonicalIndex.length === 0) {
+      this.canonicalIndex = buildCanonicalIndex(this.dedupedSnippets);
+    }
+
+    const hasCoverageFromPayload =
+      this.coverage.requiredCanonicalKeys.length > 0 ||
+      this.coverage.presentCanonicalKeys.length > 0 ||
+      this.coverage.missingCanonicalKeys.length > 0;
+    if (!hasCoverageFromPayload) {
+      this.coverage = buildCoverage(this.dedupedSnippets, DELUGE_KB_CONFIG.requiredCanonicalKeys);
+    }
+
+    if (this.summary.rawUnits === 0) {
+      this.summary.rawUnits = this.snippets.length;
+    }
+    if (this.summary.keptSnippets === 0) {
+      this.summary.keptSnippets = this.dedupedSnippets.length;
+    }
+    if (this.summary.mergedVariants === 0) {
+      this.summary.mergedVariants = this.dedupedSnippets.reduce(
+        (count, snippet) => count + (snippet.variantCount ?? 0),
+        0
+      );
+    }
+
     this.indexedAt = new Date().toISOString();
   }
 }
@@ -169,7 +288,8 @@ function rankSnippet(
   queryText: string,
   queryTokens: string[],
   requestedScope: string,
-  includeDebug: boolean
+  includeDebug: boolean,
+  includeVariants: boolean
 ): ExampleSearchMatch | null {
   let score = 0;
   const matchReasons = new Set<string>();
@@ -180,6 +300,9 @@ function rankSnippet(
     quality_bonus: 0,
     scope_bonus: 0,
     allowlist_bonus: 0,
+    canonical_bonus: 0,
+    tier_bonus: 0,
+    variants_bonus: 0,
   };
 
   const titleLower = snippet.title.toLowerCase();
@@ -187,6 +310,7 @@ function rankSnippet(
   const normalizedTopic = (snippet.normalizedTopic ?? normalizeTopic(snippet.topic)).toLowerCase();
   const aliases = snippet.functionAliases ?? [];
   const aliasLower = aliases.map((alias) => alias.toLowerCase());
+  const canonicalKey = normalizeCanonicalKey(snippet.canonicalKey ?? "");
 
   if (topicNeedle.length > 0) {
     if (normalizedTopic.includes(topicNeedle)) {
@@ -209,11 +333,17 @@ function rankSnippet(
       debug.topic_score = Number(debug.topic_score) + 4;
       matchReasons.add("alias_match");
     }
+    if (canonicalKey.includes(topicNeedle)) {
+      score += 5;
+      debug.canonical_bonus = Number(debug.canonical_bonus) + 5;
+      matchReasons.add("canonical_match");
+    }
   }
 
   if (queryTokens.length > 0) {
     const searchable = tokenize(
-      `${snippet.code} ${snippet.title} ${snippet.topic} ${snippet.functionName} ${snippet.serviceScope ?? ""}`
+      `${snippet.code} ${snippet.title} ${snippet.topic} ${snippet.functionName} ${snippet.serviceScope ?? ""} ${canonicalKey}`,
+      3
     );
     const overlap = overlapScore(queryTokens, searchable);
     if (overlap > 0) {
@@ -228,7 +358,8 @@ function rankSnippet(
     queryText.length > 0 &&
     (titleLower.includes(queryText) ||
       snippet.code.toLowerCase().includes(queryText) ||
-      normalizedTopic.includes(normalizeTopic(queryText)))
+      normalizedTopic.includes(normalizeTopic(queryText)) ||
+      canonicalKey.includes(normalizeCanonicalKey(queryText)))
   ) {
     score += 2;
     debug.phrase_bonus = 2;
@@ -246,6 +377,21 @@ function rankSnippet(
     score += 2;
     debug.scope_bonus = 2;
     matchReasons.add("scope_match");
+  }
+
+  const tier = snippet.tier ?? "C";
+  if (tier === "A") {
+    score += 0.3;
+    debug.tier_bonus = 0.3;
+  } else if (tier === "B") {
+    score += 0.1;
+    debug.tier_bonus = 0.1;
+  }
+
+  if (includeVariants && (snippet.variantCount ?? 0) > 0) {
+    score += 0.2;
+    debug.variants_bonus = 0.2;
+    matchReasons.add("has_variants");
   }
 
   if (snippet.sourceAllowlisted) {
@@ -287,15 +433,46 @@ function hydrateSnippet(raw: ProcessedSnippet): ProcessedSnippet {
       ? dedupeAliases(raw.functionAliases)
       : buildFunctionAliases(functionName);
   const sourceAllowlisted = raw.sourceAllowlisted ?? isAllowedSource(sourceUrl);
-  const qualityScore = Number.isFinite(raw.qualityScore) ? raw.qualityScore : 0;
+  const canonicalKey = normalizeCanonicalKey(
+    raw.canonicalKey ?? buildCanonicalFromTopic(normalizedTopic, serviceScope, functionName)
+  );
+  const [apiFamily, ...operationParts] = canonicalKey.split(".");
+  const operation = operationParts.join(".") || normalizeIdentifier(functionName);
+  const version = raw.version ?? inferVersion(sourceUrl);
+  const stability = normalizeStability(raw.stability, version);
+  const requiresScopes = normalizeStringList(raw.requiresScopes);
+  const requiresModule = normalizeRequiresModule(raw.requiresModule);
+  const sampleVsReference = normalizeSampleType(raw.sampleVsReference, title, normalizedCode);
+  const confidence = clamp(
+    Number.isFinite(raw.confidence) ? Number(raw.confidence) : Number(raw.qualityScore ?? 0.6),
+    0,
+    1,
+    4
+  );
+  const qualityScore = clamp(Number.isFinite(raw.qualityScore) ? Number(raw.qualityScore) : confidence, 0, 1, 4);
+  const tier = normalizeTier(raw.tier, confidence, title, normalizedCode, sourceAllowlisted, canonicalKey);
   const flags = Array.isArray(raw.flags) ? raw.flags : [];
   const qualityFlags = mergeQualityFlags(raw.qualityFlags, flags, sourceAllowlisted, qualityScore);
+  const variants = normalizeVariants(raw.variants);
+  const variantCount = Number.isInteger(raw.variantCount) ? Number(raw.variantCount) : variants.length;
 
   return {
     ...raw,
     id,
     snippetId: raw.snippetId ?? id,
     topic,
+    canonicalKey,
+    apiFamily,
+    operation,
+    version,
+    stability,
+    requiresScopes,
+    requiresModule,
+    sampleVsReference,
+    confidence,
+    tier,
+    variantCount,
+    variants,
     normalizedTopic,
     functionName,
     functionAliases,
@@ -312,6 +489,300 @@ function hydrateSnippet(raw: ProcessedSnippet): ProcessedSnippet {
     sourceAllowlisted,
     ingestedAt: raw.ingestedAt ?? new Date().toISOString(),
   };
+}
+
+function normalizeSummary(raw: Partial<KnowledgeSummary> | undefined, fallbackCount: number): KnowledgeSummary {
+  const rejected = raw?.rejected;
+  return {
+    inputSections: toFiniteNumber(raw?.inputSections, fallbackCount),
+    rawUnits: toFiniteNumber(raw?.rawUnits, fallbackCount),
+    keptSnippets: toFiniteNumber(raw?.keptSnippets, fallbackCount),
+    mergedVariants: toFiniteNumber(raw?.mergedVariants, 0),
+    rejected: {
+      sourceNotAllowed: toFiniteNumber(rejected?.sourceNotAllowed, 0),
+      noCode: toFiniteNumber(rejected?.noCode, 0),
+      notDelugeLike: toFiniteNumber(rejected?.notDelugeLike, 0),
+      noisy: toFiniteNumber(rejected?.noisy, 0),
+      duplicate: toFiniteNumber(rejected?.duplicate, 0),
+    },
+  };
+}
+
+function normalizeCoverage(raw: Partial<KnowledgeCoverage> | undefined): KnowledgeCoverage {
+  return {
+    requiredCanonicalKeys: normalizeStringList(raw?.requiredCanonicalKeys),
+    presentCanonicalKeys: normalizeStringList(raw?.presentCanonicalKeys),
+    missingCanonicalKeys: normalizeStringList(raw?.missingCanonicalKeys),
+    completionRatio: clamp(Number(raw?.completionRatio ?? 0), 0, 1, 4),
+    tierCounts: normalizeCountMap(raw?.tierCounts),
+  };
+}
+
+function normalizeCanonicalIndex(
+  raw: Array<Partial<KnowledgeCanonicalIndexItem>> | undefined
+): KnowledgeCanonicalIndexItem[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw
+    .map((item) => {
+      const canonicalKey = normalizeCanonicalKey(String(item.canonicalKey ?? ""));
+      const version = String(item.version ?? "main");
+      const apiFamily = normalizeIdentifier(String(item.apiFamily ?? canonicalKey.split(".")[0] ?? "general"));
+      const operation = normalizeIdentifier(String(item.operation ?? canonicalKey.split(".")[1] ?? "general"));
+      const groupKey = String(item.groupKey ?? `${canonicalKey}|${version}`);
+
+      return {
+        groupKey,
+        canonicalKey,
+        apiFamily,
+        operation,
+        version,
+        primarySnippetId: String(item.primarySnippetId ?? ""),
+        snippetIds: normalizeStringList(item.snippetIds),
+        variantSnippetIds: normalizeStringList(item.variantSnippetIds),
+        variantCount: toFiniteNumber(item.variantCount, 0),
+        tierCounts: normalizeCountMap(item.tierCounts),
+        serviceScopes: normalizeStringList(item.serviceScopes),
+        requiresScopes: normalizeStringList(item.requiresScopes),
+        sampleTypes: normalizeStringList(item.sampleTypes),
+      } satisfies KnowledgeCanonicalIndexItem;
+    })
+    .filter((item) => item.canonicalKey.length > 0)
+    .sort((a, b) => a.canonicalKey.localeCompare(b.canonicalKey) || a.version.localeCompare(b.version));
+}
+
+function buildCanonicalIndex(snippets: ProcessedSnippet[]): KnowledgeCanonicalIndexItem[] {
+  const grouped = new Map<string, ProcessedSnippet[]>();
+
+  for (const snippet of snippets) {
+    const canonicalKey = normalizeCanonicalKey(snippet.canonicalKey ?? "");
+    if (!canonicalKey) {
+      continue;
+    }
+
+    const version = snippet.version ?? "main";
+    const groupKey = `${canonicalKey}|${version}`;
+    const list = grouped.get(groupKey) ?? [];
+    list.push(snippet);
+    grouped.set(groupKey, list);
+  }
+
+  const index: KnowledgeCanonicalIndexItem[] = [];
+  for (const [groupKey, group] of grouped.entries()) {
+    const [primary] = [...group].sort((a, b) => b.qualityScore - a.qualityScore || a.id.localeCompare(b.id));
+    const variants = group.flatMap((snippet) => snippet.variants ?? []);
+
+    index.push({
+      groupKey,
+      canonicalKey: primary.canonicalKey ?? "general.general",
+      apiFamily: primary.apiFamily ?? "general",
+      operation: primary.operation ?? "general",
+      version: primary.version ?? "main",
+      primarySnippetId: primary.id,
+      snippetIds: [...new Set(group.map((item) => item.id))],
+      variantSnippetIds: [...new Set(variants.map((variant) => variant.id))],
+      variantCount: group.reduce((count, item) => count + (item.variantCount ?? 0), 0),
+      tierCounts: countBy(group, (item) => item.tier ?? "unknown"),
+      serviceScopes: [...new Set(group.map((item) => item.serviceScope ?? "core"))].sort(),
+      requiresScopes: [...new Set(group.flatMap((item) => item.requiresScopes ?? []))].sort(),
+      sampleTypes: [...new Set(group.map((item) => item.sampleVsReference ?? "sample"))].sort(),
+    });
+  }
+
+  return index.sort((a, b) => a.canonicalKey.localeCompare(b.canonicalKey) || a.version.localeCompare(b.version));
+}
+
+function buildCoverage(snippets: ProcessedSnippet[], requiredCanonicalKeys: string[]): KnowledgeCoverage {
+  const presentCanonicalKeys = [
+    ...new Set(snippets.map((snippet) => normalizeCanonicalKey(snippet.canonicalKey ?? "")).filter(Boolean)),
+  ].sort();
+  const missingCanonicalKeys = requiredCanonicalKeys.filter((key) => !presentCanonicalKeys.includes(key));
+  const completionRatio =
+    requiredCanonicalKeys.length === 0
+      ? 1
+      : clamp((requiredCanonicalKeys.length - missingCanonicalKeys.length) / requiredCanonicalKeys.length, 0, 1, 4);
+
+  return {
+    requiredCanonicalKeys,
+    presentCanonicalKeys,
+    missingCanonicalKeys,
+    completionRatio,
+    tierCounts: countBy(snippets, (snippet) => snippet.tier ?? "unknown"),
+  };
+}
+
+function defaultCoverage(): KnowledgeCoverage {
+  return {
+    requiredCanonicalKeys: [],
+    presentCanonicalKeys: [],
+    missingCanonicalKeys: [],
+    completionRatio: 0,
+    tierCounts: {},
+  };
+}
+
+function defaultSummary(): KnowledgeSummary {
+  return {
+    inputSections: 0,
+    rawUnits: 0,
+    keptSnippets: 0,
+    mergedVariants: 0,
+    rejected: {
+      sourceNotAllowed: 0,
+      noCode: 0,
+      notDelugeLike: 0,
+      noisy: 0,
+      duplicate: 0,
+    },
+  };
+}
+
+function normalizeVariants(rawVariants: ProcessedSnippet["variants"]): NonNullable<ProcessedSnippet["variants"]> {
+  if (!Array.isArray(rawVariants)) {
+    return [];
+  }
+
+  const normalized: NonNullable<ProcessedSnippet["variants"]> = [];
+  for (const variant of rawVariants) {
+    const id = String(variant.id ?? "").trim();
+    const title = String(variant.title ?? "").trim();
+    const sourceUrl = String(variant.sourceUrl ?? "").trim();
+    if (!id || !title || !sourceUrl) {
+      continue;
+    }
+
+    const sampleVsReference = variant.sampleVsReference === "reference" ? "reference" : "sample";
+    const confidence = clamp(Number(variant.confidence ?? 0.6), 0, 1, 4);
+    const tier = variant.tier === "A" || variant.tier === "B" || variant.tier === "C" ? variant.tier : "C";
+
+    normalized.push({
+      id,
+      title,
+      sourceUrl,
+      language: variant.language,
+      sampleVsReference,
+      confidence,
+      tier,
+    });
+  }
+  return normalized;
+}
+
+function normalizeStability(
+  value: ProcessedSnippet["stability"] | undefined,
+  version: string
+): "stable" | "beta" | "unknown" {
+  if (value === "stable" || value === "beta" || value === "unknown") {
+    return value;
+  }
+  if (/alpha|beta|rc/i.test(version)) {
+    return "beta";
+  }
+  return "stable";
+}
+
+function normalizeSampleType(
+  value: ProcessedSnippet["sampleVsReference"] | undefined,
+  title: string,
+  code: string
+): "sample" | "reference" {
+  if (value === "sample" || value === "reference") {
+    return value;
+  }
+  const text = `${title}\n${code}`.toLowerCase();
+  return /\b(example|sample)\b/.test(text) ? "sample" : "reference";
+}
+
+function normalizeTier(
+  value: ProcessedSnippet["tier"] | undefined,
+  confidence: number,
+  title: string,
+  code: string,
+  sourceAllowlisted: boolean,
+  canonicalKey: string
+): "A" | "B" | "C" {
+  if (value === "A" || value === "B" || value === "C") {
+    return value;
+  }
+
+  const risky = /\b(error|throws|invalid operation|out of bounds)\b/i.test(`${title}\n${code}`);
+
+  if (risky) {
+    return "C";
+  }
+  if (sourceAllowlisted && !risky && confidence >= 0.88 && DELUGE_TIER_A_KEYS.has(canonicalKey)) {
+    return "A";
+  }
+  if (sourceAllowlisted && confidence >= 0.75) {
+    return "B";
+  }
+  return "C";
+}
+
+function normalizeRequiresModule(value: ProcessedSnippet["requiresModule"]): string | null {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+  return null;
+}
+
+function normalizeCountMap(input: Record<string, number> | undefined): Record<string, number> {
+  const output: Record<string, number> = {};
+  for (const [key, value] of Object.entries(input ?? {})) {
+    output[key] = toFiniteNumber(value, 0);
+  }
+  return output;
+}
+
+function normalizeStringList(input: unknown): string[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+  return [...new Set(input.map((item) => String(item).trim()).filter(Boolean))].sort();
+}
+
+function buildCanonicalFromTopic(normalizedTopic: string, serviceScope: string, functionName: string): string {
+  if (normalizedTopic.includes(":")) {
+    const [familyRaw, opRaw = functionName || "general"] = normalizedTopic.split(":");
+    return `${normalizeIdentifier(familyRaw || "general")}.${normalizeIdentifier(opRaw || "general")}`;
+  }
+  return `${normalizeIdentifier(serviceScope || "core")}.${normalizeIdentifier(functionName || "general")}`;
+}
+
+function normalizeCanonicalKey(value: string): string {
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/\.+/g, ".")
+    .replace(/^-+|-+$/g, "")
+    .replace(/^\.+|\.+$/g, "");
+
+  if (!normalized) {
+    return "";
+  }
+
+  if (!normalized.includes(".")) {
+    return `general.${normalizeIdentifier(normalized)}`;
+  }
+
+  const [familyRaw, ...operationParts] = normalized.split(".");
+  return `${normalizeIdentifier(familyRaw || "general")}.${normalizeIdentifier(operationParts.join("-") || "general")}`;
+}
+
+function normalizeIdentifier(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 120);
 }
 
 function mergeQualityFlags(
@@ -359,24 +830,6 @@ function shouldReplace(previous: ProcessedSnippet, incoming: ProcessedSnippet): 
   return incoming.id.localeCompare(previous.id) < 0;
 }
 
-function tokenize(value: string): string[] {
-  return value
-    .toLowerCase()
-    .split(/[^a-z0-9_]+/)
-    .filter((token) => token.length > 2);
-}
-
-function overlapScore(input: string[], target: string[]): number {
-  const targetSet = new Set(target);
-  let score = 0;
-  for (const token of input) {
-    if (targetSet.has(token)) {
-      score += 1;
-    }
-  }
-  return score;
-}
-
 function buildFunctionAliases(functionName: string): string[] {
   const cleaned = functionName.trim().replace(/\(\)$/, "");
   const lower = cleaned.toLowerCase();
@@ -394,6 +847,19 @@ function normalizeTopic(topic: string): string {
 
 function normalizeCode(code: string): string {
   return code.replace(/\r\n/g, "\n").trim();
+}
+
+function inferVersion(sourceUrl: string): string {
+  try {
+    const url = new URL(sourceUrl);
+    const explicit = url.pathname.match(/\/v(\d+)(?:\/|$)/i);
+    if (explicit?.[1]) {
+      return `v${explicit[1]}`;
+    }
+  } catch {
+    // no-op
+  }
+  return "main";
 }
 
 function inferServiceScope(sourceUrl: string, title: string): string {
@@ -455,10 +921,52 @@ function isAllowedSource(source: string): boolean {
   }
 }
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
+function clamp(value: number, min: number, max: number, precision?: number): number {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  const clamped = Math.max(min, Math.min(max, value));
+  if (typeof precision === "number") {
+    return Number(clamped.toFixed(precision));
+  }
+  return clamped;
+}
+
+function toFiniteNumber(value: unknown, fallback: number): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return fallback;
+  }
+  return Math.max(0, Math.floor(value));
+}
+
+function countBy<T>(items: T[], getKey: (item: T) => string): Record<string, number> {
+  const output: Record<string, number> = {};
+  for (const item of items) {
+    const key = getKey(item);
+    output[key] = (output[key] ?? 0) + 1;
+  }
+  return output;
 }
 
 function hash(input: string): string {
   return createHash("sha256").update(input).digest("hex").slice(0, 16);
+}
+
+function loadDelugeKbConfig(): { requiredCanonicalKeys: string[]; tierAKeys: string[] } {
+  try {
+    const configUrl = new URL("../../../config/deluge-kb.json", import.meta.url);
+    const payload = JSON.parse(readFileSync(configUrl, "utf8")) as {
+      requiredCanonicalKeys?: string[];
+      tierAKeys?: string[];
+    };
+    return {
+      requiredCanonicalKeys: normalizeStringList(payload.requiredCanonicalKeys),
+      tierAKeys: normalizeStringList(payload.tierAKeys),
+    };
+  } catch {
+    return {
+      requiredCanonicalKeys: [],
+      tierAKeys: [],
+    };
+  }
 }

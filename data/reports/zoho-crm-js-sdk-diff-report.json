@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-02-20T21:11:52.681Z",
+  "schemaVersion": "zoho-crm-js-sdk-diff/v1",
+  "counts": {
+    "oldCanonicalSnippets": 25,
+    "newCanonicalSnippets": 25,
+    "deltaCanonicalSnippets": 0,
+    "oldRawUnits": 104,
+    "newRawUnits": 104,
+    "deltaRawUnits": 0
+  },
+  "changes": {
+    "addedKeys": [],
+    "removedKeys": [],
+    "changedScopes": [],
+    "changedTiers": [],
+    "changedSources": [],
+    "tierAChanges": []
+  },
+  "requiresManualReview": false,
+  "reviewReason": "No Tier A curation changes detected."
+}

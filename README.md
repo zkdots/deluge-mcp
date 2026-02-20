@@ -12,10 +12,42 @@ A strict, beginner-friendly MCP server for Deluge syntax support.
   - `deluge_validate`
   - `deluge_fix`
   - `deluge_examples`
+  - `zoho_crm_js_examples`
 - MCP resources:
   - `deluge://rules/v1`
   - `deluge://cheatsheet/beginner`
   - `deluge://topics/v1`
+  - `deluge://snippets/v1`
+  - `deluge://canonical-index/v1`
+  - `deluge://coverage/v1`
+  - `zoho://crm-js-sdk/snippets/v1`
+  - `zoho://crm-js-sdk/topics/v1`
+  - `zoho://crm-js-sdk/canonical-index/v1`
+  - `zoho://crm-js-sdk/coverage/v1`
+
+## What's New In This PR
+
+- Curated knowledge-pack pipelines for both Deluge and Zoho CRM JavaScript SDK.
+- Canonical snippet model with:
+  - `canonicalKey`, `apiFamily`, `operation`, `version`, `stability`
+  - `requiresScopes`, `requiresModule`
+  - `sampleVsReference`, `confidence`, `tier`
+  - merged `variants` and canonical index groups
+- New retrieval controls in tools:
+  - `canonical_key`
+  - `tier` (`A|B|C`)
+  - `include_variants`
+- New MCP resources for governance and observability:
+  - `deluge://canonical-index/v1`
+  - `deluge://coverage/v1`
+  - `zoho://crm-js-sdk/canonical-index/v1`
+  - `zoho://crm-js-sdk/coverage/v1`
+- `deluge_health` now reports curation metadata (schema version, coverage completion, missing keys, tier counts, variant stats).
+- Drift-control automation:
+  - weekly refresh workflows for Deluge and Zoho
+  - diff reports in `data/reports/`
+  - manual review gate for Tier A canonical changes
+- Added curation/retrieval test coverage and scenario-based smoke checks for both knowledge packs.
 
 ## Setup
 
@@ -131,10 +163,106 @@ npm run ingest -- data/raw/context7.md
 
 Output is written to `data/processed/snippets.json`.
 
+Build/refresh curated Deluge KB metadata (canonical index, tiers, coverage):
+
+```bash
+npm run kb:deluge
+```
+
 One-click helper:
 
 ```bash
 npm run ingest:oneclick -- data/raw/context7.md data/processed/snippets.json
+```
+
+After ingest, re-apply Deluge curation:
+
+```bash
+npm run kb:deluge
+```
+
+## Deluge Knowledge Curation
+
+Schema: `deluge-kb/v1`
+
+Curated Deluge snippets include:
+
+- `canonicalKey` (`api_family.operation`)
+- `apiFamily`, `operation`
+- `version`, `stability`
+- `requiresScopes`, `requiresModule`
+- `sampleVsReference`
+- `confidence` and `tier` (`A|B|C`)
+- `variants` (merged alternates)
+
+Tier policy:
+
+- `A`: high-confidence production-safe references
+- `B`: standard examples and usage patterns
+- `C`: risky/error-path or lower-confidence references
+
+Commands:
+
+```bash
+npm run kb:deluge
+npm run kb:deluge:refresh
+npm run kb:deluge:refresh:allow-tier-a
+npm run kb:deluge:diff
+```
+
+## Zoho CRM JS SDK Knowledge Pack (Context7)
+
+The repo includes a curated knowledge pack for Context7 library:
+
+- Library ID: `/zoho/zohocrm-javascript-sdk-8.0`
+- Raw seed file: `data/raw/zoho-crm-js-sdk-context7.md`
+- Processed output: `data/processed/zoho-crm-js-sdk-snippets.json`
+- Diff reports:
+  - `data/reports/zoho-crm-js-sdk-diff-report.json`
+  - `data/reports/zoho-crm-js-sdk-diff-report.md`
+
+### Curation Model
+
+Schema: `zoho-crm-js-sdk-kb/v1`
+
+Each canonical snippet includes:
+
+- `canonicalKey` (`api_family.operation`)
+- `apiFamily`, `operation`
+- `version`, `stability`
+- `requiresScopes`, `requiresModule`
+- `sampleVsReference`
+- `confidence` and `tier` (`A|B|C`)
+- `variants` (merged alternates)
+
+Tier policy:
+
+- `A`: production-safe reference patterns
+- `B`: sample/demo usage
+- `C`: structural reference fragments (APIDOC-heavy)
+
+Build the pack:
+
+```bash
+npm run kb:zoho-crm-js-sdk
+```
+
+Refresh + diff + manual-review gate:
+
+```bash
+npm run kb:zoho-crm-js-sdk:refresh
+```
+
+Allow Tier A promotions after human review:
+
+```bash
+npm run kb:zoho-crm-js-sdk:refresh:allow-tier-a
+```
+
+Run diff only:
+
+```bash
+npm run kb:zoho-crm-js-sdk:diff
 ```
 
 ## Run Server
@@ -173,6 +301,12 @@ Retrieval quality scenario:
 
 ```bash
 npm run smoke:retrieval
+```
+
+Zoho retrieval quality scenario:
+
+```bash
+npm run smoke:zoho-retrieval
 ```
 
 Matrix smoke over stdio:
