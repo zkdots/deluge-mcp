@@ -25,6 +25,30 @@ A strict, beginner-friendly MCP server for Deluge syntax support.
   - `zoho://crm-js-sdk/canonical-index/v1`
   - `zoho://crm-js-sdk/coverage/v1`
 
+## What's New In This PR
+
+- Curated knowledge-pack pipelines for both Deluge and Zoho CRM JavaScript SDK.
+- Canonical snippet model with:
+  - `canonicalKey`, `apiFamily`, `operation`, `version`, `stability`
+  - `requiresScopes`, `requiresModule`
+  - `sampleVsReference`, `confidence`, `tier`
+  - merged `variants` and canonical index groups
+- New retrieval controls in tools:
+  - `canonical_key`
+  - `tier` (`A|B|C`)
+  - `include_variants`
+- New MCP resources for governance and observability:
+  - `deluge://canonical-index/v1`
+  - `deluge://coverage/v1`
+  - `zoho://crm-js-sdk/canonical-index/v1`
+  - `zoho://crm-js-sdk/coverage/v1`
+- `deluge_health` now reports curation metadata (schema version, coverage completion, missing keys, tier counts, variant stats).
+- Drift-control automation:
+  - weekly refresh workflows for Deluge and Zoho
+  - diff reports in `data/reports/`
+  - manual review gate for Tier A canonical changes
+- Added curation/retrieval test coverage and scenario-based smoke checks for both knowledge packs.
+
 ## Setup
 
 ```bash
