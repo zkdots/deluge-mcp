@@ -44,7 +44,7 @@
     "labels:sync": "node scripts/sync-labels.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.4",
+    "@modelcontextprotocol/sdk": "^1.27.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
